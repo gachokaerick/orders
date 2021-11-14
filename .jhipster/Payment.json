@@ -1,0 +1,78 @@
+{
+  "name": "Payment",
+  "fields": [
+    {
+      "fieldName": "createTime",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "updateTime",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "paymentStatus",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "payerCountryCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "payerEmail",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "payerName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "payerSurname",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "payerId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "currency",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "amount",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "paymentId",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "order",
+      "otherEntityRelationshipName": "payments",
+      "relationshipValidateRules": "required",
+      "relationshipName": "order"
+    }
+  ],
+  "javadoc": "@author Erick Gachoka",
+  "entityTableName": "payment",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["store", "orders"],
+  "microserviceName": "orders",
+  "clientRootFolder": "orders",
+  "databaseType": "sql",
+  "changelogDate": "20211114050838"
+}

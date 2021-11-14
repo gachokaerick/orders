@@ -1,0 +1,52 @@
+{
+  "name": "Address",
+  "fields": [
+    {
+      "fieldName": "street",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "city",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "town",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "country",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "zipcode",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "buyer",
+      "otherEntityRelationshipName": "addresses",
+      "relationshipValidateRules": "required",
+      "relationshipName": "buyer",
+      "otherEntityField": "email"
+    }
+  ],
+  "javadoc": "@author Erick Gachoka",
+  "entityTableName": "address",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["store", "orders"],
+  "microserviceName": "orders",
+  "clientRootFolder": "orders",
+  "databaseType": "sql",
+  "changelogDate": "20211114050738"
+}

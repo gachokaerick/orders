@@ -1,0 +1,66 @@
+{
+  "name": "Order",
+  "fields": [
+    {
+      "fieldName": "orderDate",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "orderStatus",
+      "fieldType": "OrderStatus",
+      "fieldValues": "SUBMITTED,AWAITING_VALIDATION,DRAFT,STOCK_CONFIRMED,PAID,SHIPPED,CANCELLED",
+      "fieldTypeJavadoc": "@author Erick Gachoka",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "address",
+      "otherEntityRelationshipName": "order",
+      "relationshipValidateRules": "required",
+      "relationshipName": "address",
+      "otherEntityField": "town",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "orderItem",
+      "otherEntityRelationshipName": "order",
+      "relationshipName": "orderItems"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "payment",
+      "otherEntityRelationshipName": "order",
+      "relationshipName": "payments"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "buyer",
+      "otherEntityRelationshipName": "orders",
+      "relationshipValidateRules": "required",
+      "relationshipName": "buyer",
+      "otherEntityField": "email"
+    }
+  ],
+  "javadoc": "@author Erick Gachoka",
+  "entityTableName": "jhi_order",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["store", "orders"],
+  "microserviceName": "orders",
+  "clientRootFolder": "orders",
+  "databaseType": "sql",
+  "changelogDate": "20211114051138"
+}
