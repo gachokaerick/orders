@@ -45,6 +45,7 @@
     "creationTimestamp": 1636866398613,
     "jwtSecretKey": "YjdhM2VjYjg0MWI1NmE4Nzg2ZWEyMWIxYWJlOWI4OTVhYTUwYzc5MzEzMDQ3MGFiYTkwMWVmZTYzZTMwZjU2Mjc2ZmMwNGM2NWNkYzE3YWI5YzAyZDJhOGFiNjkwMGNlZDczOWU0MmU1N2QxZGMzNWFmZWUwZDMxYmRhY2Y3YmE=",
     "entities": ["Address", "Payment", "OrderItem", "Buyer", "Order"],
-    "lastLiquibaseTimestamp": 1636866698000
+    "lastLiquibaseTimestamp": 1636866698000,
+    "gatewayServerPort": "8080"
   }
 }
