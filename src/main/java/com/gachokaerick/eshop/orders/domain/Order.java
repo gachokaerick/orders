@@ -2,7 +2,6 @@ package com.gachokaerick.eshop.orders.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gachokaerick.eshop.orders.domain.enumeration.OrderStatus;
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -15,7 +14,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 /**
  * @author Erick Gachoka
  */
-@ApiModel(description = "@author Erick Gachoka")
 @Entity
 @Table(name = "jhi_order")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

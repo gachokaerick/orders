@@ -10,6 +10,8 @@ import com.gachokaerick.eshop.orders.IntegrationTest;
 import com.gachokaerick.eshop.orders.domain.Address;
 import com.gachokaerick.eshop.orders.domain.Buyer;
 import com.gachokaerick.eshop.orders.repository.AddressRepository;
+import com.gachokaerick.eshop.orders.service.dto.AddressDTO;
+import com.gachokaerick.eshop.orders.service.mapper.AddressMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -54,6 +56,9 @@ class AddressResourceIT {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private AddressMapper addressMapper;
 
     @Autowired
     private EntityManager em;
@@ -125,12 +130,13 @@ class AddressResourceIT {
     void createAddress() throws Exception {
         int databaseSizeBeforeCreate = addressRepository.findAll().size();
         // Create the Address
+        AddressDTO addressDTO = addressMapper.toDto(address);
         restAddressMockMvc
             .perform(
                 post(ENTITY_API_URL)
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(address))
+                    .content(TestUtil.convertObjectToJsonBytes(addressDTO))
             )
             .andExpect(status().isCreated());
 
@@ -150,6 +156,7 @@ class AddressResourceIT {
     void createAddressWithExistingId() throws Exception {
         // Create the Address with an existing ID
         address.setId(1L);
+        AddressDTO addressDTO = addressMapper.toDto(address);
 
         int databaseSizeBeforeCreate = addressRepository.findAll().size();
 
@@ -159,7 +166,7 @@ class AddressResourceIT {
                 post(ENTITY_API_URL)
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(address))
+                    .content(TestUtil.convertObjectToJsonBytes(addressDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -176,13 +183,14 @@ class AddressResourceIT {
         address.setCity(null);
 
         // Create the Address, which fails.
+        AddressDTO addressDTO = addressMapper.toDto(address);
 
         restAddressMockMvc
             .perform(
                 post(ENTITY_API_URL)
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(address))
+                    .content(TestUtil.convertObjectToJsonBytes(addressDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -198,13 +206,14 @@ class AddressResourceIT {
         address.setTown(null);
 
         // Create the Address, which fails.
+        AddressDTO addressDTO = addressMapper.toDto(address);
 
         restAddressMockMvc
             .perform(
                 post(ENTITY_API_URL)
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(address))
+                    .content(TestUtil.convertObjectToJsonBytes(addressDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -220,13 +229,14 @@ class AddressResourceIT {
         address.setCountry(null);
 
         // Create the Address, which fails.
+        AddressDTO addressDTO = addressMapper.toDto(address);
 
         restAddressMockMvc
             .perform(
                 post(ENTITY_API_URL)
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(address))
+                    .content(TestUtil.convertObjectToJsonBytes(addressDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -292,13 +302,14 @@ class AddressResourceIT {
         // Disconnect from session so that the updates on updatedAddress are not directly saved in db
         em.detach(updatedAddress);
         updatedAddress.street(UPDATED_STREET).city(UPDATED_CITY).town(UPDATED_TOWN).country(UPDATED_COUNTRY).zipcode(UPDATED_ZIPCODE);
+        AddressDTO addressDTO = addressMapper.toDto(updatedAddress);
 
         restAddressMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedAddress.getId())
+                put(ENTITY_API_URL_ID, addressDTO.getId())
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedAddress))
+                    .content(TestUtil.convertObjectToJsonBytes(addressDTO))
             )
             .andExpect(status().isOk());
 
@@ -319,13 +330,16 @@ class AddressResourceIT {
         int databaseSizeBeforeUpdate = addressRepository.findAll().size();
         address.setId(count.incrementAndGet());
 
+        // Create the Address
+        AddressDTO addressDTO = addressMapper.toDto(address);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAddressMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, address.getId())
+                put(ENTITY_API_URL_ID, addressDTO.getId())
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(address))
+                    .content(TestUtil.convertObjectToJsonBytes(addressDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -340,13 +354,16 @@ class AddressResourceIT {
         int databaseSizeBeforeUpdate = addressRepository.findAll().size();
         address.setId(count.incrementAndGet());
 
+        // Create the Address
+        AddressDTO addressDTO = addressMapper.toDto(address);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restAddressMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(address))
+                    .content(TestUtil.convertObjectToJsonBytes(addressDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -361,10 +378,16 @@ class AddressResourceIT {
         int databaseSizeBeforeUpdate = addressRepository.findAll().size();
         address.setId(count.incrementAndGet());
 
+        // Create the Address
+        AddressDTO addressDTO = addressMapper.toDto(address);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restAddressMockMvc
             .perform(
-                put(ENTITY_API_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(address))
+                put(ENTITY_API_URL)
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(addressDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 
@@ -452,13 +475,16 @@ class AddressResourceIT {
         int databaseSizeBeforeUpdate = addressRepository.findAll().size();
         address.setId(count.incrementAndGet());
 
+        // Create the Address
+        AddressDTO addressDTO = addressMapper.toDto(address);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAddressMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, address.getId())
+                patch(ENTITY_API_URL_ID, addressDTO.getId())
                     .with(csrf())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(address))
+                    .content(TestUtil.convertObjectToJsonBytes(addressDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -473,13 +499,16 @@ class AddressResourceIT {
         int databaseSizeBeforeUpdate = addressRepository.findAll().size();
         address.setId(count.incrementAndGet());
 
+        // Create the Address
+        AddressDTO addressDTO = addressMapper.toDto(address);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restAddressMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .with(csrf())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(address))
+                    .content(TestUtil.convertObjectToJsonBytes(addressDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -494,13 +523,16 @@ class AddressResourceIT {
         int databaseSizeBeforeUpdate = addressRepository.findAll().size();
         address.setId(count.incrementAndGet());
 
+        // Create the Address
+        AddressDTO addressDTO = addressMapper.toDto(address);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restAddressMockMvc
             .perform(
                 patch(ENTITY_API_URL)
                     .with(csrf())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(address))
+                    .content(TestUtil.convertObjectToJsonBytes(addressDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

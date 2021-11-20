@@ -1,7 +1,6 @@
 package com.gachokaerick.eshop.orders.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.*;
@@ -12,7 +11,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 /**
  * @author Erick Gachoka
  */
-@ApiModel(description = "@author Erick Gachoka")
 @Entity
 @Table(name = "order_item")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

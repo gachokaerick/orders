@@ -63,7 +63,7 @@
   ],
   "javadoc": "@author Erick Gachoka",
   "entityTableName": "payment",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "pagination",
   "service": "serviceClass",
   "jpaMetamodelFiltering": false,

@@ -2,6 +2,8 @@ package com.gachokaerick.eshop.orders.service;
 
 import com.gachokaerick.eshop.orders.domain.Address;
 import com.gachokaerick.eshop.orders.repository.AddressRepository;
+import com.gachokaerick.eshop.orders.service.dto.AddressDTO;
+import com.gachokaerick.eshop.orders.service.mapper.AddressMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,52 +23,44 @@ public class AddressService {
 
     private final AddressRepository addressRepository;
 
-    public AddressService(AddressRepository addressRepository) {
+    private final AddressMapper addressMapper;
+
+    public AddressService(AddressRepository addressRepository, AddressMapper addressMapper) {
         this.addressRepository = addressRepository;
+        this.addressMapper = addressMapper;
     }
 
     /**
      * Save a address.
      *
-     * @param address the entity to save.
+     * @param addressDTO the entity to save.
      * @return the persisted entity.
      */
-    public Address save(Address address) {
-        log.debug("Request to save Address : {}", address);
-        return addressRepository.save(address);
+    public AddressDTO save(AddressDTO addressDTO) {
+        log.debug("Request to save Address : {}", addressDTO);
+        Address address = addressMapper.toEntity(addressDTO);
+        address = addressRepository.save(address);
+        return addressMapper.toDto(address);
     }
 
     /**
      * Partially update a address.
      *
-     * @param address the entity to update partially.
+     * @param addressDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Address> partialUpdate(Address address) {
-        log.debug("Request to partially update Address : {}", address);
+    public Optional<AddressDTO> partialUpdate(AddressDTO addressDTO) {
+        log.debug("Request to partially update Address : {}", addressDTO);
 
         return addressRepository
-            .findById(address.getId())
+            .findById(addressDTO.getId())
             .map(existingAddress -> {
-                if (address.getStreet() != null) {
-                    existingAddress.setStreet(address.getStreet());
-                }
-                if (address.getCity() != null) {
-                    existingAddress.setCity(address.getCity());
-                }
-                if (address.getTown() != null) {
-                    existingAddress.setTown(address.getTown());
-                }
-                if (address.getCountry() != null) {
-                    existingAddress.setCountry(address.getCountry());
-                }
-                if (address.getZipcode() != null) {
-                    existingAddress.setZipcode(address.getZipcode());
-                }
+                addressMapper.partialUpdate(existingAddress, addressDTO);
 
                 return existingAddress;
             })
-            .map(addressRepository::save);
+            .map(addressRepository::save)
+            .map(addressMapper::toDto);
     }
 
     /**
@@ -76,9 +70,9 @@ public class AddressService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Address> findAll(Pageable pageable) {
+    public Page<AddressDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Addresses");
-        return addressRepository.findAll(pageable);
+        return addressRepository.findAll(pageable).map(addressMapper::toDto);
     }
 
     /**
@@ -88,9 +82,9 @@ public class AddressService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Address> findOne(Long id) {
+    public Optional<AddressDTO> findOne(Long id) {
         log.debug("Request to get Address : {}", id);
-        return addressRepository.findById(id);
+        return addressRepository.findById(id).map(addressMapper::toDto);
     }
 
     /**

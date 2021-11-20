@@ -2,6 +2,8 @@ package com.gachokaerick.eshop.orders.service;
 
 import com.gachokaerick.eshop.orders.domain.Buyer;
 import com.gachokaerick.eshop.orders.repository.BuyerRepository;
+import com.gachokaerick.eshop.orders.service.dto.BuyerDTO;
+import com.gachokaerick.eshop.orders.service.mapper.BuyerMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,52 +23,44 @@ public class BuyerService {
 
     private final BuyerRepository buyerRepository;
 
-    public BuyerService(BuyerRepository buyerRepository) {
+    private final BuyerMapper buyerMapper;
+
+    public BuyerService(BuyerRepository buyerRepository, BuyerMapper buyerMapper) {
         this.buyerRepository = buyerRepository;
+        this.buyerMapper = buyerMapper;
     }
 
     /**
      * Save a buyer.
      *
-     * @param buyer the entity to save.
+     * @param buyerDTO the entity to save.
      * @return the persisted entity.
      */
-    public Buyer save(Buyer buyer) {
-        log.debug("Request to save Buyer : {}", buyer);
-        return buyerRepository.save(buyer);
+    public BuyerDTO save(BuyerDTO buyerDTO) {
+        log.debug("Request to save Buyer : {}", buyerDTO);
+        Buyer buyer = buyerMapper.toEntity(buyerDTO);
+        buyer = buyerRepository.save(buyer);
+        return buyerMapper.toDto(buyer);
     }
 
     /**
      * Partially update a buyer.
      *
-     * @param buyer the entity to update partially.
+     * @param buyerDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Buyer> partialUpdate(Buyer buyer) {
-        log.debug("Request to partially update Buyer : {}", buyer);
+    public Optional<BuyerDTO> partialUpdate(BuyerDTO buyerDTO) {
+        log.debug("Request to partially update Buyer : {}", buyerDTO);
 
         return buyerRepository
-            .findById(buyer.getId())
+            .findById(buyerDTO.getId())
             .map(existingBuyer -> {
-                if (buyer.getFirstName() != null) {
-                    existingBuyer.setFirstName(buyer.getFirstName());
-                }
-                if (buyer.getLastName() != null) {
-                    existingBuyer.setLastName(buyer.getLastName());
-                }
-                if (buyer.getGender() != null) {
-                    existingBuyer.setGender(buyer.getGender());
-                }
-                if (buyer.getEmail() != null) {
-                    existingBuyer.setEmail(buyer.getEmail());
-                }
-                if (buyer.getPhone() != null) {
-                    existingBuyer.setPhone(buyer.getPhone());
-                }
+                buyerMapper.partialUpdate(existingBuyer, buyerDTO);
 
                 return existingBuyer;
             })
-            .map(buyerRepository::save);
+            .map(buyerRepository::save)
+            .map(buyerMapper::toDto);
     }
 
     /**
@@ -76,9 +70,9 @@ public class BuyerService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Buyer> findAll(Pageable pageable) {
+    public Page<BuyerDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Buyers");
-        return buyerRepository.findAll(pageable);
+        return buyerRepository.findAll(pageable).map(buyerMapper::toDto);
     }
 
     /**
@@ -88,9 +82,9 @@ public class BuyerService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Buyer> findOne(Long id) {
+    public Optional<BuyerDTO> findOne(Long id) {
         log.debug("Request to get Buyer : {}", id);
-        return buyerRepository.findById(id);
+        return buyerRepository.findById(id).map(buyerMapper::toDto);
     }
 
     /**

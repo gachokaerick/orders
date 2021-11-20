@@ -11,7 +11,8 @@ import com.gachokaerick.eshop.orders.domain.Buyer;
 import com.gachokaerick.eshop.orders.domain.User;
 import com.gachokaerick.eshop.orders.domain.enumeration.Gender;
 import com.gachokaerick.eshop.orders.repository.BuyerRepository;
-import com.gachokaerick.eshop.orders.repository.UserRepository;
+import com.gachokaerick.eshop.orders.service.dto.BuyerDTO;
+import com.gachokaerick.eshop.orders.service.mapper.BuyerMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -58,7 +59,7 @@ class BuyerResourceIT {
     private BuyerRepository buyerRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private BuyerMapper buyerMapper;
 
     @Autowired
     private EntityManager em;
@@ -120,9 +121,13 @@ class BuyerResourceIT {
     void createBuyer() throws Exception {
         int databaseSizeBeforeCreate = buyerRepository.findAll().size();
         // Create the Buyer
+        BuyerDTO buyerDTO = buyerMapper.toDto(buyer);
         restBuyerMockMvc
             .perform(
-                post(ENTITY_API_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(buyer))
+                post(ENTITY_API_URL)
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(buyerDTO))
             )
             .andExpect(status().isCreated());
 
@@ -142,13 +147,17 @@ class BuyerResourceIT {
     void createBuyerWithExistingId() throws Exception {
         // Create the Buyer with an existing ID
         buyer.setId(1L);
+        BuyerDTO buyerDTO = buyerMapper.toDto(buyer);
 
         int databaseSizeBeforeCreate = buyerRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restBuyerMockMvc
             .perform(
-                post(ENTITY_API_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(buyer))
+                post(ENTITY_API_URL)
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(buyerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -165,10 +174,14 @@ class BuyerResourceIT {
         buyer.setFirstName(null);
 
         // Create the Buyer, which fails.
+        BuyerDTO buyerDTO = buyerMapper.toDto(buyer);
 
         restBuyerMockMvc
             .perform(
-                post(ENTITY_API_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(buyer))
+                post(ENTITY_API_URL)
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(buyerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -184,10 +197,14 @@ class BuyerResourceIT {
         buyer.setLastName(null);
 
         // Create the Buyer, which fails.
+        BuyerDTO buyerDTO = buyerMapper.toDto(buyer);
 
         restBuyerMockMvc
             .perform(
-                post(ENTITY_API_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(buyer))
+                post(ENTITY_API_URL)
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(buyerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -203,10 +220,14 @@ class BuyerResourceIT {
         buyer.setGender(null);
 
         // Create the Buyer, which fails.
+        BuyerDTO buyerDTO = buyerMapper.toDto(buyer);
 
         restBuyerMockMvc
             .perform(
-                post(ENTITY_API_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(buyer))
+                post(ENTITY_API_URL)
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(buyerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -222,10 +243,14 @@ class BuyerResourceIT {
         buyer.setEmail(null);
 
         // Create the Buyer, which fails.
+        BuyerDTO buyerDTO = buyerMapper.toDto(buyer);
 
         restBuyerMockMvc
             .perform(
-                post(ENTITY_API_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(buyer))
+                post(ENTITY_API_URL)
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(buyerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -241,10 +266,14 @@ class BuyerResourceIT {
         buyer.setPhone(null);
 
         // Create the Buyer, which fails.
+        BuyerDTO buyerDTO = buyerMapper.toDto(buyer);
 
         restBuyerMockMvc
             .perform(
-                post(ENTITY_API_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(buyer))
+                post(ENTITY_API_URL)
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(buyerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -315,13 +344,14 @@ class BuyerResourceIT {
             .gender(UPDATED_GENDER)
             .email(UPDATED_EMAIL)
             .phone(UPDATED_PHONE);
+        BuyerDTO buyerDTO = buyerMapper.toDto(updatedBuyer);
 
         restBuyerMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedBuyer.getId())
+                put(ENTITY_API_URL_ID, buyerDTO.getId())
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedBuyer))
+                    .content(TestUtil.convertObjectToJsonBytes(buyerDTO))
             )
             .andExpect(status().isOk());
 
@@ -342,13 +372,16 @@ class BuyerResourceIT {
         int databaseSizeBeforeUpdate = buyerRepository.findAll().size();
         buyer.setId(count.incrementAndGet());
 
+        // Create the Buyer
+        BuyerDTO buyerDTO = buyerMapper.toDto(buyer);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restBuyerMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, buyer.getId())
+                put(ENTITY_API_URL_ID, buyerDTO.getId())
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(buyer))
+                    .content(TestUtil.convertObjectToJsonBytes(buyerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -363,13 +396,16 @@ class BuyerResourceIT {
         int databaseSizeBeforeUpdate = buyerRepository.findAll().size();
         buyer.setId(count.incrementAndGet());
 
+        // Create the Buyer
+        BuyerDTO buyerDTO = buyerMapper.toDto(buyer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restBuyerMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(buyer))
+                    .content(TestUtil.convertObjectToJsonBytes(buyerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -384,10 +420,16 @@ class BuyerResourceIT {
         int databaseSizeBeforeUpdate = buyerRepository.findAll().size();
         buyer.setId(count.incrementAndGet());
 
+        // Create the Buyer
+        BuyerDTO buyerDTO = buyerMapper.toDto(buyer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restBuyerMockMvc
             .perform(
-                put(ENTITY_API_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(buyer))
+                put(ENTITY_API_URL)
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(buyerDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 
@@ -475,13 +517,16 @@ class BuyerResourceIT {
         int databaseSizeBeforeUpdate = buyerRepository.findAll().size();
         buyer.setId(count.incrementAndGet());
 
+        // Create the Buyer
+        BuyerDTO buyerDTO = buyerMapper.toDto(buyer);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restBuyerMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, buyer.getId())
+                patch(ENTITY_API_URL_ID, buyerDTO.getId())
                     .with(csrf())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(buyer))
+                    .content(TestUtil.convertObjectToJsonBytes(buyerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -496,13 +541,16 @@ class BuyerResourceIT {
         int databaseSizeBeforeUpdate = buyerRepository.findAll().size();
         buyer.setId(count.incrementAndGet());
 
+        // Create the Buyer
+        BuyerDTO buyerDTO = buyerMapper.toDto(buyer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restBuyerMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .with(csrf())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(buyer))
+                    .content(TestUtil.convertObjectToJsonBytes(buyerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -517,13 +565,16 @@ class BuyerResourceIT {
         int databaseSizeBeforeUpdate = buyerRepository.findAll().size();
         buyer.setId(count.incrementAndGet());
 
+        // Create the Buyer
+        BuyerDTO buyerDTO = buyerMapper.toDto(buyer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restBuyerMockMvc
             .perform(
                 patch(ENTITY_API_URL)
                     .with(csrf())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(buyer))
+                    .content(TestUtil.convertObjectToJsonBytes(buyerDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

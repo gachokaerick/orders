@@ -37,7 +37,7 @@
   ],
   "javadoc": "@author Erick Gachoka",
   "entityTableName": "address",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "pagination",
   "service": "serviceClass",
   "jpaMetamodelFiltering": false,

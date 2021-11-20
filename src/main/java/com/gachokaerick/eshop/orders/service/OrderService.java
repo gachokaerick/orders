@@ -2,6 +2,8 @@ package com.gachokaerick.eshop.orders.service;
 
 import com.gachokaerick.eshop.orders.domain.Order;
 import com.gachokaerick.eshop.orders.repository.OrderRepository;
+import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
+import com.gachokaerick.eshop.orders.service.mapper.OrderMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,46 +23,44 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    public OrderService(OrderRepository orderRepository) {
+    private final OrderMapper orderMapper;
+
+    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
+        this.orderMapper = orderMapper;
     }
 
     /**
      * Save a order.
      *
-     * @param order the entity to save.
+     * @param orderDTO the entity to save.
      * @return the persisted entity.
      */
-    public Order save(Order order) {
-        log.debug("Request to save Order : {}", order);
-        return orderRepository.save(order);
+    public OrderDTO save(OrderDTO orderDTO) {
+        log.debug("Request to save Order : {}", orderDTO);
+        Order order = orderMapper.toEntity(orderDTO);
+        order = orderRepository.save(order);
+        return orderMapper.toDto(order);
     }
 
     /**
      * Partially update a order.
      *
-     * @param order the entity to update partially.
+     * @param orderDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Order> partialUpdate(Order order) {
-        log.debug("Request to partially update Order : {}", order);
+    public Optional<OrderDTO> partialUpdate(OrderDTO orderDTO) {
+        log.debug("Request to partially update Order : {}", orderDTO);
 
         return orderRepository
-            .findById(order.getId())
+            .findById(orderDTO.getId())
             .map(existingOrder -> {
-                if (order.getOrderDate() != null) {
-                    existingOrder.setOrderDate(order.getOrderDate());
-                }
-                if (order.getOrderStatus() != null) {
-                    existingOrder.setOrderStatus(order.getOrderStatus());
-                }
-                if (order.getDescription() != null) {
-                    existingOrder.setDescription(order.getDescription());
-                }
+                orderMapper.partialUpdate(existingOrder, orderDTO);
 
                 return existingOrder;
             })
-            .map(orderRepository::save);
+            .map(orderRepository::save)
+            .map(orderMapper::toDto);
     }
 
     /**
@@ -70,9 +70,9 @@ public class OrderService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Order> findAll(Pageable pageable) {
+    public Page<OrderDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Orders");
-        return orderRepository.findAll(pageable);
+        return orderRepository.findAll(pageable).map(orderMapper::toDto);
     }
 
     /**
@@ -82,9 +82,9 @@ public class OrderService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Order> findOne(Long id) {
+    public Optional<OrderDTO> findOne(Long id) {
         log.debug("Request to get Order : {}", id);
-        return orderRepository.findById(id);
+        return orderRepository.findById(id).map(orderMapper::toDto);
     }
 
     /**

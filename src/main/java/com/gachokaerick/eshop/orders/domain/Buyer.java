@@ -2,7 +2,6 @@ package com.gachokaerick.eshop.orders.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gachokaerick.eshop.orders.domain.enumeration.Gender;
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +13,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 /**
  * @author Erick Gachoka
  */
-@ApiModel(description = "@author Erick Gachoka")
 @Entity
 @Table(name = "buyer")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

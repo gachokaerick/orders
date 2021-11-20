@@ -55,7 +55,7 @@
   ],
   "javadoc": "@author Erick Gachoka",
   "entityTableName": "buyer",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "pagination",
   "service": "serviceClass",
   "jpaMetamodelFiltering": false,

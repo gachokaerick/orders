@@ -2,6 +2,8 @@ package com.gachokaerick.eshop.orders.service;
 
 import com.gachokaerick.eshop.orders.domain.OrderItem;
 import com.gachokaerick.eshop.orders.repository.OrderItemRepository;
+import com.gachokaerick.eshop.orders.service.dto.OrderItemDTO;
+import com.gachokaerick.eshop.orders.service.mapper.OrderItemMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,55 +23,44 @@ public class OrderItemService {
 
     private final OrderItemRepository orderItemRepository;
 
-    public OrderItemService(OrderItemRepository orderItemRepository) {
+    private final OrderItemMapper orderItemMapper;
+
+    public OrderItemService(OrderItemRepository orderItemRepository, OrderItemMapper orderItemMapper) {
         this.orderItemRepository = orderItemRepository;
+        this.orderItemMapper = orderItemMapper;
     }
 
     /**
      * Save a orderItem.
      *
-     * @param orderItem the entity to save.
+     * @param orderItemDTO the entity to save.
      * @return the persisted entity.
      */
-    public OrderItem save(OrderItem orderItem) {
-        log.debug("Request to save OrderItem : {}", orderItem);
-        return orderItemRepository.save(orderItem);
+    public OrderItemDTO save(OrderItemDTO orderItemDTO) {
+        log.debug("Request to save OrderItem : {}", orderItemDTO);
+        OrderItem orderItem = orderItemMapper.toEntity(orderItemDTO);
+        orderItem = orderItemRepository.save(orderItem);
+        return orderItemMapper.toDto(orderItem);
     }
 
     /**
      * Partially update a orderItem.
      *
-     * @param orderItem the entity to update partially.
+     * @param orderItemDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<OrderItem> partialUpdate(OrderItem orderItem) {
-        log.debug("Request to partially update OrderItem : {}", orderItem);
+    public Optional<OrderItemDTO> partialUpdate(OrderItemDTO orderItemDTO) {
+        log.debug("Request to partially update OrderItem : {}", orderItemDTO);
 
         return orderItemRepository
-            .findById(orderItem.getId())
+            .findById(orderItemDTO.getId())
             .map(existingOrderItem -> {
-                if (orderItem.getProductName() != null) {
-                    existingOrderItem.setProductName(orderItem.getProductName());
-                }
-                if (orderItem.getPictureUrl() != null) {
-                    existingOrderItem.setPictureUrl(orderItem.getPictureUrl());
-                }
-                if (orderItem.getUnitPrice() != null) {
-                    existingOrderItem.setUnitPrice(orderItem.getUnitPrice());
-                }
-                if (orderItem.getDiscount() != null) {
-                    existingOrderItem.setDiscount(orderItem.getDiscount());
-                }
-                if (orderItem.getUnits() != null) {
-                    existingOrderItem.setUnits(orderItem.getUnits());
-                }
-                if (orderItem.getProductId() != null) {
-                    existingOrderItem.setProductId(orderItem.getProductId());
-                }
+                orderItemMapper.partialUpdate(existingOrderItem, orderItemDTO);
 
                 return existingOrderItem;
             })
-            .map(orderItemRepository::save);
+            .map(orderItemRepository::save)
+            .map(orderItemMapper::toDto);
     }
 
     /**
@@ -79,9 +70,9 @@ public class OrderItemService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<OrderItem> findAll(Pageable pageable) {
+    public Page<OrderItemDTO> findAll(Pageable pageable) {
         log.debug("Request to get all OrderItems");
-        return orderItemRepository.findAll(pageable);
+        return orderItemRepository.findAll(pageable).map(orderItemMapper::toDto);
     }
 
     /**
@@ -91,9 +82,9 @@ public class OrderItemService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<OrderItem> findOne(Long id) {
+    public Optional<OrderItemDTO> findOne(Long id) {
         log.debug("Request to get OrderItem : {}", id);
-        return orderItemRepository.findById(id);
+        return orderItemRepository.findById(id).map(orderItemMapper::toDto);
     }
 
     /**

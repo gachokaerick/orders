@@ -2,6 +2,8 @@ package com.gachokaerick.eshop.orders.service;
 
 import com.gachokaerick.eshop.orders.domain.Payment;
 import com.gachokaerick.eshop.orders.repository.PaymentRepository;
+import com.gachokaerick.eshop.orders.service.dto.PaymentDTO;
+import com.gachokaerick.eshop.orders.service.mapper.PaymentMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,70 +23,44 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
 
-    public PaymentService(PaymentRepository paymentRepository) {
+    private final PaymentMapper paymentMapper;
+
+    public PaymentService(PaymentRepository paymentRepository, PaymentMapper paymentMapper) {
         this.paymentRepository = paymentRepository;
+        this.paymentMapper = paymentMapper;
     }
 
     /**
      * Save a payment.
      *
-     * @param payment the entity to save.
+     * @param paymentDTO the entity to save.
      * @return the persisted entity.
      */
-    public Payment save(Payment payment) {
-        log.debug("Request to save Payment : {}", payment);
-        return paymentRepository.save(payment);
+    public PaymentDTO save(PaymentDTO paymentDTO) {
+        log.debug("Request to save Payment : {}", paymentDTO);
+        Payment payment = paymentMapper.toEntity(paymentDTO);
+        payment = paymentRepository.save(payment);
+        return paymentMapper.toDto(payment);
     }
 
     /**
      * Partially update a payment.
      *
-     * @param payment the entity to update partially.
+     * @param paymentDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Payment> partialUpdate(Payment payment) {
-        log.debug("Request to partially update Payment : {}", payment);
+    public Optional<PaymentDTO> partialUpdate(PaymentDTO paymentDTO) {
+        log.debug("Request to partially update Payment : {}", paymentDTO);
 
         return paymentRepository
-            .findById(payment.getId())
+            .findById(paymentDTO.getId())
             .map(existingPayment -> {
-                if (payment.getCreateTime() != null) {
-                    existingPayment.setCreateTime(payment.getCreateTime());
-                }
-                if (payment.getUpdateTime() != null) {
-                    existingPayment.setUpdateTime(payment.getUpdateTime());
-                }
-                if (payment.getPaymentStatus() != null) {
-                    existingPayment.setPaymentStatus(payment.getPaymentStatus());
-                }
-                if (payment.getPayerCountryCode() != null) {
-                    existingPayment.setPayerCountryCode(payment.getPayerCountryCode());
-                }
-                if (payment.getPayerEmail() != null) {
-                    existingPayment.setPayerEmail(payment.getPayerEmail());
-                }
-                if (payment.getPayerName() != null) {
-                    existingPayment.setPayerName(payment.getPayerName());
-                }
-                if (payment.getPayerSurname() != null) {
-                    existingPayment.setPayerSurname(payment.getPayerSurname());
-                }
-                if (payment.getPayerId() != null) {
-                    existingPayment.setPayerId(payment.getPayerId());
-                }
-                if (payment.getCurrency() != null) {
-                    existingPayment.setCurrency(payment.getCurrency());
-                }
-                if (payment.getAmount() != null) {
-                    existingPayment.setAmount(payment.getAmount());
-                }
-                if (payment.getPaymentId() != null) {
-                    existingPayment.setPaymentId(payment.getPaymentId());
-                }
+                paymentMapper.partialUpdate(existingPayment, paymentDTO);
 
                 return existingPayment;
             })
-            .map(paymentRepository::save);
+            .map(paymentRepository::save)
+            .map(paymentMapper::toDto);
     }
 
     /**
@@ -94,9 +70,9 @@ public class PaymentService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Payment> findAll(Pageable pageable) {
+    public Page<PaymentDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Payments");
-        return paymentRepository.findAll(pageable);
+        return paymentRepository.findAll(pageable).map(paymentMapper::toDto);
     }
 
     /**
@@ -106,9 +82,9 @@ public class PaymentService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Payment> findOne(Long id) {
+    public Optional<PaymentDTO> findOne(Long id) {
         log.debug("Request to get Payment : {}", id);
-        return paymentRepository.findById(id);
+        return paymentRepository.findById(id).map(paymentMapper::toDto);
     }
 
     /**
