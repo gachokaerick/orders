@@ -1,7 +1,9 @@
-package com.gachokaerick.eshop.orders.service.mapper;
+package com.gachokaerick.eshop.orders.domain.aggregates.order;
 
-import com.gachokaerick.eshop.orders.domain.Order;
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerMapper;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
+import com.gachokaerick.eshop.orders.service.mapper.AddressMapper;
+import com.gachokaerick.eshop.orders.service.mapper.EntityMapper;
 import org.mapstruct.*;
 
 /**

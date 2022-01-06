@@ -1,12 +1,13 @@
 package com.gachokaerick.eshop.orders.service.dto;
 
+import com.gachokaerick.eshop.orders.domain.Address;
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.validation.constraints.*;
 
 /**
- * A DTO for the {@link com.gachokaerick.eshop.orders.domain.Address} entity.
+ * A DTO for the {@link Address} entity.
  */
 @ApiModel(description = "@author Erick Gachoka")
 public class AddressDTO implements Serializable {

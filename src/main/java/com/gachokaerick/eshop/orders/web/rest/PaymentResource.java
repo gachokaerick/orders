@@ -1,5 +1,6 @@
 package com.gachokaerick.eshop.orders.web.rest;
 
+import com.gachokaerick.eshop.orders.domain.aggregates.order.Payment;
 import com.gachokaerick.eshop.orders.repository.PaymentRepository;
 import com.gachokaerick.eshop.orders.service.PaymentService;
 import com.gachokaerick.eshop.orders.service.dto.PaymentDTO;
@@ -17,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -26,7 +26,7 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link com.gachokaerick.eshop.orders.domain.Payment}.
+ * REST controller for managing {@link Payment}.
  */
 @RestController
 @RequestMapping("/api")

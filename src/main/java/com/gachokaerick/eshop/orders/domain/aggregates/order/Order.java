@@ -1,6 +1,8 @@
-package com.gachokaerick.eshop.orders.domain;
+package com.gachokaerick.eshop.orders.domain.aggregates.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.gachokaerick.eshop.orders.domain.Address;
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
 import com.gachokaerick.eshop.orders.domain.enumeration.OrderStatus;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -55,10 +57,9 @@ public class Order implements Serializable {
     @JsonIgnoreProperties(value = { "order" }, allowSetters = true)
     private Set<Payment> payments = new HashSet<>();
 
-    @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "user", "addresses", "orders" }, allowSetters = true)
-    private Buyer buyer;
+    @Column(name = "buyer_id")
+    private Long buyerId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -66,12 +67,12 @@ public class Order implements Serializable {
         return this.id;
     }
 
-    public Order id(Long id) {
+    Order id(Long id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(Long id) {
+    void setId(Long id) {
         this.id = id;
     }
 
@@ -79,12 +80,12 @@ public class Order implements Serializable {
         return this.orderDate;
     }
 
-    public Order orderDate(ZonedDateTime orderDate) {
+    Order orderDate(ZonedDateTime orderDate) {
         this.setOrderDate(orderDate);
         return this;
     }
 
-    public void setOrderDate(ZonedDateTime orderDate) {
+    void setOrderDate(ZonedDateTime orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -92,12 +93,12 @@ public class Order implements Serializable {
         return this.orderStatus;
     }
 
-    public Order orderStatus(OrderStatus orderStatus) {
+    Order orderStatus(OrderStatus orderStatus) {
         this.setOrderStatus(orderStatus);
         return this;
     }
 
-    public void setOrderStatus(OrderStatus orderStatus) {
+    void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 
@@ -105,12 +106,12 @@ public class Order implements Serializable {
         return this.description;
     }
 
-    public Order description(String description) {
+    Order description(String description) {
         this.setDescription(description);
         return this;
     }
 
-    public void setDescription(String description) {
+    void setDescription(String description) {
         this.description = description;
     }
 
@@ -118,11 +119,11 @@ public class Order implements Serializable {
         return this.address;
     }
 
-    public void setAddress(Address address) {
+    void setAddress(Address address) {
         this.address = address;
     }
 
-    public Order address(Address address) {
+    Order address(Address address) {
         this.setAddress(address);
         return this;
     }
@@ -131,7 +132,7 @@ public class Order implements Serializable {
         return this.orderItems;
     }
 
-    public void setOrderItems(Set<OrderItem> orderItems) {
+    void setOrderItems(Set<OrderItem> orderItems) {
         if (this.orderItems != null) {
             this.orderItems.forEach(i -> i.setOrder(null));
         }
@@ -141,18 +142,18 @@ public class Order implements Serializable {
         this.orderItems = orderItems;
     }
 
-    public Order orderItems(Set<OrderItem> orderItems) {
+    Order orderItems(Set<OrderItem> orderItems) {
         this.setOrderItems(orderItems);
         return this;
     }
 
-    public Order addOrderItems(OrderItem orderItem) {
+    Order addOrderItems(OrderItem orderItem) {
         this.orderItems.add(orderItem);
         orderItem.setOrder(this);
         return this;
     }
 
-    public Order removeOrderItems(OrderItem orderItem) {
+    Order removeOrderItems(OrderItem orderItem) {
         this.orderItems.remove(orderItem);
         orderItem.setOrder(null);
         return this;
@@ -162,7 +163,7 @@ public class Order implements Serializable {
         return this.payments;
     }
 
-    public void setPayments(Set<Payment> payments) {
+    void setPayments(Set<Payment> payments) {
         if (this.payments != null) {
             this.payments.forEach(i -> i.setOrder(null));
         }
@@ -172,33 +173,33 @@ public class Order implements Serializable {
         this.payments = payments;
     }
 
-    public Order payments(Set<Payment> payments) {
+    Order payments(Set<Payment> payments) {
         this.setPayments(payments);
         return this;
     }
 
-    public Order addPayments(Payment payment) {
+    Order addPayments(Payment payment) {
         this.payments.add(payment);
         payment.setOrder(this);
         return this;
     }
 
-    public Order removePayments(Payment payment) {
+    Order removePayments(Payment payment) {
         this.payments.remove(payment);
         payment.setOrder(null);
         return this;
     }
 
-    public Buyer getBuyer() {
-        return this.buyer;
+    public Long getBuyerId() {
+        return buyerId;
     }
 
-    public void setBuyer(Buyer buyer) {
-        this.buyer = buyer;
+    void setBuyerId(Long buyerId) {
+        this.buyerId = buyerId;
     }
 
-    public Order buyer(Buyer buyer) {
-        this.setBuyer(buyer);
+    Order buyerId(Long buyerId) {
+        this.setBuyerId(buyerId);
         return this;
     }
 

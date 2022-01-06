@@ -1,4 +1,4 @@
-package com.gachokaerick.eshop.orders.domain;
+package com.gachokaerick.eshop.orders.domain.aggregates.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
@@ -59,12 +59,12 @@ public class OrderItem implements Serializable {
         return this.id;
     }
 
-    public OrderItem id(Long id) {
+    OrderItem id(Long id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(Long id) {
+    void setId(Long id) {
         this.id = id;
     }
 
@@ -72,12 +72,12 @@ public class OrderItem implements Serializable {
         return this.productName;
     }
 
-    public OrderItem productName(String productName) {
+    OrderItem productName(String productName) {
         this.setProductName(productName);
         return this;
     }
 
-    public void setProductName(String productName) {
+    void setProductName(String productName) {
         this.productName = productName;
     }
 
@@ -85,12 +85,12 @@ public class OrderItem implements Serializable {
         return this.pictureUrl;
     }
 
-    public OrderItem pictureUrl(String pictureUrl) {
+    OrderItem pictureUrl(String pictureUrl) {
         this.setPictureUrl(pictureUrl);
         return this;
     }
 
-    public void setPictureUrl(String pictureUrl) {
+    void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
     }
 
@@ -98,12 +98,12 @@ public class OrderItem implements Serializable {
         return this.unitPrice;
     }
 
-    public OrderItem unitPrice(BigDecimal unitPrice) {
+    OrderItem unitPrice(BigDecimal unitPrice) {
         this.setUnitPrice(unitPrice);
         return this;
     }
 
-    public void setUnitPrice(BigDecimal unitPrice) {
+    void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 
@@ -111,12 +111,12 @@ public class OrderItem implements Serializable {
         return this.discount;
     }
 
-    public OrderItem discount(BigDecimal discount) {
+    OrderItem discount(BigDecimal discount) {
         this.setDiscount(discount);
         return this;
     }
 
-    public void setDiscount(BigDecimal discount) {
+    void setDiscount(BigDecimal discount) {
         this.discount = discount;
     }
 
@@ -124,12 +124,12 @@ public class OrderItem implements Serializable {
         return this.units;
     }
 
-    public OrderItem units(Integer units) {
+    OrderItem units(Integer units) {
         this.setUnits(units);
         return this;
     }
 
-    public void setUnits(Integer units) {
+    void setUnits(Integer units) {
         this.units = units;
     }
 
@@ -137,12 +137,12 @@ public class OrderItem implements Serializable {
         return this.productId;
     }
 
-    public OrderItem productId(Long productId) {
+    OrderItem productId(Long productId) {
         this.setProductId(productId);
         return this;
     }
 
-    public void setProductId(Long productId) {
+    void setProductId(Long productId) {
         this.productId = productId;
     }
 
@@ -150,11 +150,11 @@ public class OrderItem implements Serializable {
         return this.order;
     }
 
-    public void setOrder(Order order) {
+    void setOrder(Order order) {
         this.order = order;
     }
 
-    public OrderItem order(Order order) {
+    OrderItem order(Order order) {
         this.setOrder(order);
         return this;
     }

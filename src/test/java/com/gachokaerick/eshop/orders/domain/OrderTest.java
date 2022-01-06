@@ -2,6 +2,7 @@ package com.gachokaerick.eshop.orders.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.gachokaerick.eshop.orders.domain.aggregates.order.Order;
 import com.gachokaerick.eshop.orders.web.rest.TestUtil;
 import org.junit.jupiter.api.Test;
 

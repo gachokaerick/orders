@@ -1,9 +1,9 @@
 package com.gachokaerick.eshop.orders.service;
 
-import com.gachokaerick.eshop.orders.domain.Payment;
+import com.gachokaerick.eshop.orders.domain.aggregates.order.Payment;
+import com.gachokaerick.eshop.orders.domain.aggregates.order.PaymentMapper;
 import com.gachokaerick.eshop.orders.repository.PaymentRepository;
 import com.gachokaerick.eshop.orders.service.dto.PaymentDTO;
-import com.gachokaerick.eshop.orders.service.mapper.PaymentMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

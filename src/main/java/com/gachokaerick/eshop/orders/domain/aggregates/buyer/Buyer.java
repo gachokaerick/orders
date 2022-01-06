@@ -1,6 +1,9 @@
-package com.gachokaerick.eshop.orders.domain;
+package com.gachokaerick.eshop.orders.domain.aggregates.buyer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.gachokaerick.eshop.orders.domain.Address;
+import com.gachokaerick.eshop.orders.domain.User;
+import com.gachokaerick.eshop.orders.domain.aggregates.order.Order;
 import com.gachokaerick.eshop.orders.domain.enumeration.Gender;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -58,23 +61,18 @@ public class Buyer implements Serializable {
     @JsonIgnoreProperties(value = { "buyer" }, allowSetters = true)
     private Set<Address> addresses = new HashSet<>();
 
-    @OneToMany(mappedBy = "buyer")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "address", "orderItems", "payments", "buyer" }, allowSetters = true)
-    private Set<Order> orders = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
         return this.id;
     }
 
-    public Buyer id(Long id) {
+    Buyer id(Long id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(Long id) {
+    void setId(Long id) {
         this.id = id;
     }
 
@@ -82,12 +80,12 @@ public class Buyer implements Serializable {
         return this.firstName;
     }
 
-    public Buyer firstName(String firstName) {
+    Buyer firstName(String firstName) {
         this.setFirstName(firstName);
         return this;
     }
 
-    public void setFirstName(String firstName) {
+    void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
@@ -95,12 +93,12 @@ public class Buyer implements Serializable {
         return this.lastName;
     }
 
-    public Buyer lastName(String lastName) {
+    Buyer lastName(String lastName) {
         this.setLastName(lastName);
         return this;
     }
 
-    public void setLastName(String lastName) {
+    void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
@@ -108,12 +106,12 @@ public class Buyer implements Serializable {
         return this.gender;
     }
 
-    public Buyer gender(Gender gender) {
+    Buyer gender(Gender gender) {
         this.setGender(gender);
         return this;
     }
 
-    public void setGender(Gender gender) {
+    void setGender(Gender gender) {
         this.gender = gender;
     }
 
@@ -121,12 +119,12 @@ public class Buyer implements Serializable {
         return this.email;
     }
 
-    public Buyer email(String email) {
+    Buyer email(String email) {
         this.setEmail(email);
         return this;
     }
 
-    public void setEmail(String email) {
+    void setEmail(String email) {
         this.email = email;
     }
 
@@ -134,12 +132,12 @@ public class Buyer implements Serializable {
         return this.phone;
     }
 
-    public Buyer phone(String phone) {
+    Buyer phone(String phone) {
         this.setPhone(phone);
         return this;
     }
 
-    public void setPhone(String phone) {
+    void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -147,11 +145,11 @@ public class Buyer implements Serializable {
         return this.user;
     }
 
-    public void setUser(User user) {
+    void setUser(User user) {
         this.user = user;
     }
 
-    public Buyer user(User user) {
+    Buyer user(User user) {
         this.setUser(user);
         return this;
     }
@@ -160,7 +158,7 @@ public class Buyer implements Serializable {
         return this.addresses;
     }
 
-    public void setAddresses(Set<Address> addresses) {
+    void setAddresses(Set<Address> addresses) {
         if (this.addresses != null) {
             this.addresses.forEach(i -> i.setBuyer(null));
         }
@@ -170,51 +168,20 @@ public class Buyer implements Serializable {
         this.addresses = addresses;
     }
 
-    public Buyer addresses(Set<Address> addresses) {
+    Buyer addresses(Set<Address> addresses) {
         this.setAddresses(addresses);
         return this;
     }
 
-    public Buyer addAddresses(Address address) {
+    Buyer addAddresses(Address address) {
         this.addresses.add(address);
         address.setBuyer(this);
         return this;
     }
 
-    public Buyer removeAddresses(Address address) {
+    Buyer removeAddresses(Address address) {
         this.addresses.remove(address);
         address.setBuyer(null);
-        return this;
-    }
-
-    public Set<Order> getOrders() {
-        return this.orders;
-    }
-
-    public void setOrders(Set<Order> orders) {
-        if (this.orders != null) {
-            this.orders.forEach(i -> i.setBuyer(null));
-        }
-        if (orders != null) {
-            orders.forEach(i -> i.setBuyer(this));
-        }
-        this.orders = orders;
-    }
-
-    public Buyer orders(Set<Order> orders) {
-        this.setOrders(orders);
-        return this;
-    }
-
-    public Buyer addOrders(Order order) {
-        this.orders.add(order);
-        order.setBuyer(this);
-        return this;
-    }
-
-    public Buyer removeOrders(Order order) {
-        this.orders.remove(order);
-        order.setBuyer(null);
         return this;
     }
 

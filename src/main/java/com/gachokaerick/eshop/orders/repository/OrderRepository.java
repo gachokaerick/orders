@@ -1,6 +1,6 @@
 package com.gachokaerick.eshop.orders.repository;
 
-import com.gachokaerick.eshop.orders.domain.Order;
+import com.gachokaerick.eshop.orders.domain.aggregates.order.Order;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 

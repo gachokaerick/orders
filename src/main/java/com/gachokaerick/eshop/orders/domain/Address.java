@@ -1,6 +1,7 @@
 package com.gachokaerick.eshop.orders.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;

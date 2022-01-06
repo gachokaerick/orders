@@ -1,9 +1,9 @@
 package com.gachokaerick.eshop.orders.service;
 
-import com.gachokaerick.eshop.orders.domain.OrderItem;
+import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderItem;
+import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderItemMapper;
 import com.gachokaerick.eshop.orders.repository.OrderItemRepository;
 import com.gachokaerick.eshop.orders.service.dto.OrderItemDTO;
-import com.gachokaerick.eshop.orders.service.mapper.OrderItemMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

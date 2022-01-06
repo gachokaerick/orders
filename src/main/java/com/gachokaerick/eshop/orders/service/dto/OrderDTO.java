@@ -1,5 +1,6 @@
 package com.gachokaerick.eshop.orders.service.dto;
 
+import com.gachokaerick.eshop.orders.domain.aggregates.order.Order;
 import com.gachokaerick.eshop.orders.domain.enumeration.OrderStatus;
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
@@ -8,7 +9,7 @@ import java.util.Objects;
 import javax.validation.constraints.*;
 
 /**
- * A DTO for the {@link com.gachokaerick.eshop.orders.domain.Order} entity.
+ * A DTO for the {@link Order} entity.
  */
 @ApiModel(description = "@author Erick Gachoka")
 public class OrderDTO implements Serializable {

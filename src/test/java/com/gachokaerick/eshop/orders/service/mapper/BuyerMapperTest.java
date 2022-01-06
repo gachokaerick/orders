@@ -2,8 +2,8 @@ package com.gachokaerick.eshop.orders.service.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 class BuyerMapperTest {
 

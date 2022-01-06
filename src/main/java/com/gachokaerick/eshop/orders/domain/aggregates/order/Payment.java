@@ -1,4 +1,4 @@
-package com.gachokaerick.eshop.orders.domain;
+package com.gachokaerick.eshop.orders.domain.aggregates.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
@@ -75,12 +75,12 @@ public class Payment implements Serializable {
         return this.id;
     }
 
-    public Payment id(Long id) {
+    Payment id(Long id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(Long id) {
+    void setId(Long id) {
         this.id = id;
     }
 
@@ -88,12 +88,12 @@ public class Payment implements Serializable {
         return this.createTime;
     }
 
-    public Payment createTime(ZonedDateTime createTime) {
+    Payment createTime(ZonedDateTime createTime) {
         this.setCreateTime(createTime);
         return this;
     }
 
-    public void setCreateTime(ZonedDateTime createTime) {
+    void setCreateTime(ZonedDateTime createTime) {
         this.createTime = createTime;
     }
 
@@ -101,12 +101,12 @@ public class Payment implements Serializable {
         return this.updateTime;
     }
 
-    public Payment updateTime(ZonedDateTime updateTime) {
+    Payment updateTime(ZonedDateTime updateTime) {
         this.setUpdateTime(updateTime);
         return this;
     }
 
-    public void setUpdateTime(ZonedDateTime updateTime) {
+    void setUpdateTime(ZonedDateTime updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -114,12 +114,12 @@ public class Payment implements Serializable {
         return this.paymentStatus;
     }
 
-    public Payment paymentStatus(String paymentStatus) {
+    Payment paymentStatus(String paymentStatus) {
         this.setPaymentStatus(paymentStatus);
         return this;
     }
 
-    public void setPaymentStatus(String paymentStatus) {
+    void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 
@@ -127,12 +127,12 @@ public class Payment implements Serializable {
         return this.payerCountryCode;
     }
 
-    public Payment payerCountryCode(String payerCountryCode) {
+    Payment payerCountryCode(String payerCountryCode) {
         this.setPayerCountryCode(payerCountryCode);
         return this;
     }
 
-    public void setPayerCountryCode(String payerCountryCode) {
+    void setPayerCountryCode(String payerCountryCode) {
         this.payerCountryCode = payerCountryCode;
     }
 
@@ -140,12 +140,12 @@ public class Payment implements Serializable {
         return this.payerEmail;
     }
 
-    public Payment payerEmail(String payerEmail) {
+    Payment payerEmail(String payerEmail) {
         this.setPayerEmail(payerEmail);
         return this;
     }
 
-    public void setPayerEmail(String payerEmail) {
+    void setPayerEmail(String payerEmail) {
         this.payerEmail = payerEmail;
     }
 
@@ -153,12 +153,12 @@ public class Payment implements Serializable {
         return this.payerName;
     }
 
-    public Payment payerName(String payerName) {
+    Payment payerName(String payerName) {
         this.setPayerName(payerName);
         return this;
     }
 
-    public void setPayerName(String payerName) {
+    void setPayerName(String payerName) {
         this.payerName = payerName;
     }
 
@@ -166,12 +166,12 @@ public class Payment implements Serializable {
         return this.payerSurname;
     }
 
-    public Payment payerSurname(String payerSurname) {
+    Payment payerSurname(String payerSurname) {
         this.setPayerSurname(payerSurname);
         return this;
     }
 
-    public void setPayerSurname(String payerSurname) {
+    void setPayerSurname(String payerSurname) {
         this.payerSurname = payerSurname;
     }
 
@@ -179,12 +179,12 @@ public class Payment implements Serializable {
         return this.payerId;
     }
 
-    public Payment payerId(String payerId) {
+    Payment payerId(String payerId) {
         this.setPayerId(payerId);
         return this;
     }
 
-    public void setPayerId(String payerId) {
+    void setPayerId(String payerId) {
         this.payerId = payerId;
     }
 
@@ -192,12 +192,12 @@ public class Payment implements Serializable {
         return this.currency;
     }
 
-    public Payment currency(String currency) {
+    Payment currency(String currency) {
         this.setCurrency(currency);
         return this;
     }
 
-    public void setCurrency(String currency) {
+    void setCurrency(String currency) {
         this.currency = currency;
     }
 
@@ -205,12 +205,12 @@ public class Payment implements Serializable {
         return this.amount;
     }
 
-    public Payment amount(BigDecimal amount) {
+    Payment amount(BigDecimal amount) {
         this.setAmount(amount);
         return this;
     }
 
-    public void setAmount(BigDecimal amount) {
+    void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -218,12 +218,12 @@ public class Payment implements Serializable {
         return this.paymentId;
     }
 
-    public Payment paymentId(String paymentId) {
+    Payment paymentId(String paymentId) {
         this.setPaymentId(paymentId);
         return this;
     }
 
-    public void setPaymentId(String paymentId) {
+    void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
     }
 
@@ -231,11 +231,11 @@ public class Payment implements Serializable {
         return this.order;
     }
 
-    public void setOrder(Order order) {
+    void setOrder(Order order) {
         this.order = order;
     }
 
-    public Payment order(Order order) {
+    Payment order(Order order) {
         this.setOrder(order);
         return this;
     }
