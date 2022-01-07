@@ -1,9 +1,12 @@
 package com.gachokaerick.eshop.orders.domain.aggregates.order;
 
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerMapper;
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerMapperImpl;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
 import com.gachokaerick.eshop.orders.service.mapper.AddressMapper;
+import com.gachokaerick.eshop.orders.service.mapper.AddressMapperImpl;
 import com.gachokaerick.eshop.orders.service.mapper.EntityMapper;
+import java.util.Objects;
 import org.mapstruct.*;
 
 /**
@@ -19,4 +22,26 @@ public interface OrderMapper extends EntityMapper<OrderDTO, Order> {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     OrderDTO toDtoId(Order order);
+
+    default void partialUpdate(Order entity, OrderDTO dto) {
+        if (dto == null) {
+            return;
+        }
+
+        if (dto.getId() != null && entity.getId() != null) {
+            if (!Objects.equals(dto.getId(), entity.getId())) {
+                return;
+            }
+        }
+
+        if (dto.getOrderDate() != null) {
+            entity.setOrderDate(dto.getOrderDate());
+        }
+        if (dto.getOrderStatus() != null) {
+            entity.setOrderStatus(dto.getOrderStatus());
+        }
+        if (dto.getDescription() != null) {
+            entity.setDescription(dto.getDescription());
+        }
+    }
 }
