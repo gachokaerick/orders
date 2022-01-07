@@ -1,4 +1,4 @@
-package com.gachokaerick.eshop.orders.domain;
+package com.gachokaerick.eshop.orders.domain.aggregates.order;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

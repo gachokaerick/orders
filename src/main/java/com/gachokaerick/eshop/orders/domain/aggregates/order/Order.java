@@ -61,6 +61,9 @@ public class Order implements Serializable {
     @Column(name = "buyer_id")
     private Long buyerId;
 
+    @Transient
+    private Buyer buyer;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -200,6 +203,19 @@ public class Order implements Serializable {
 
     Order buyerId(Long buyerId) {
         this.setBuyerId(buyerId);
+        return this;
+    }
+
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
+    }
+
+    Order buyer(Buyer buyer) {
+        this.setBuyer(buyer);
         return this;
     }
 
