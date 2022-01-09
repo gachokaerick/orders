@@ -33,7 +33,7 @@ public class OrderDomain {
 
     public void addOrderItem(OrderItemDTO orderItemDTO) {
         Order order = getOrder();
-        OrderItemDomain orderItemDomain = new OrderItemDomain.OrderItemBuilder().withOrderItemDTO(orderItemDTO).build();
+        OrderItemDomain orderItemDomain = new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build();
         order.addOrderItems(orderItemDomain.getOrderItem());
     }
 

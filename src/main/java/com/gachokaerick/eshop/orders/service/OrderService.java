@@ -1,6 +1,7 @@
 package com.gachokaerick.eshop.orders.service;
 
 import com.gachokaerick.eshop.orders.domain.aggregates.order.Order;
+import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderDomain;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderMapper;
 import com.gachokaerick.eshop.orders.repository.OrderRepository;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
@@ -38,7 +39,7 @@ public class OrderService {
      */
     public OrderDTO save(OrderDTO orderDTO) {
         log.debug("Request to save Order : {}", orderDTO);
-        Order order = orderMapper.toEntity(orderDTO);
+        Order order = new OrderDomain.OrderBuilder().withOrderDTO(orderDTO).build().getOrder();
         order = orderRepository.save(order);
         return orderMapper.toDto(order);
     }

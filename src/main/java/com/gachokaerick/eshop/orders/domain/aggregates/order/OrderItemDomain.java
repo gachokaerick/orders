@@ -4,7 +4,7 @@ import com.gachokaerick.eshop.orders.domain.exception.DomainException;
 import com.gachokaerick.eshop.orders.service.dto.OrderItemDTO;
 import javax.validation.constraints.NotNull;
 
-class OrderItemDomain {
+public class OrderItemDomain {
 
     private static final String domainName = "OrderItem";
 
@@ -42,7 +42,7 @@ class OrderItemDomain {
 
         public OrderItemBuilder() {}
 
-        OrderItemBuilder withOrderItemDTO(@NotNull OrderItemDTO orderItemDTO) {
+        public OrderItemBuilder withDTO(@NotNull OrderItemDTO orderItemDTO) {
             this.orderItemDTO = orderItemDTO;
             return this;
         }

@@ -1,6 +1,7 @@
 package com.gachokaerick.eshop.orders.service;
 
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerDomain;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerMapper;
 import com.gachokaerick.eshop.orders.repository.BuyerRepository;
 import com.gachokaerick.eshop.orders.service.dto.BuyerDTO;
@@ -38,7 +39,7 @@ public class BuyerService {
      */
     public BuyerDTO save(BuyerDTO buyerDTO) {
         log.debug("Request to save Buyer : {}", buyerDTO);
-        Buyer buyer = buyerMapper.toEntity(buyerDTO);
+        Buyer buyer = new BuyerDomain.BuyerBuilder().withDTO(buyerDTO).build().getBuyer();
         buyer = buyerRepository.save(buyer);
         return buyerMapper.toDto(buyer);
     }
