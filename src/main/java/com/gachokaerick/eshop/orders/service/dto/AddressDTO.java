@@ -1,6 +1,8 @@
 package com.gachokaerick.eshop.orders.service.dto;
 
 import com.gachokaerick.eshop.orders.domain.Address;
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerDomain;
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.util.Objects;
@@ -118,5 +120,18 @@ public class AddressDTO implements Serializable {
             ", zipcode='" + getZipcode() + "'" +
             ", buyer=" + getBuyer() +
             "}";
+    }
+
+    public Address toEntity() {
+        Buyer buyer = new BuyerDomain.BuyerBuilder().withDTO(getBuyer()).build().getBuyer();
+        Address address = new Address();
+        address.setId(getId());
+        address.setStreet(getStreet());
+        address.setCity(getCity());
+        address.setTown(getTown());
+        address.setCountry(getCountry());
+        address.setZipcode(getZipcode());
+        address.setBuyer(buyer);
+        return address;
     }
 }

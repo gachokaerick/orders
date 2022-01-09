@@ -14,7 +14,6 @@ public interface OrderItemMapper extends EntityMapper<OrderItemDTO, OrderItem> {
     OrderItemDTO toDto(OrderItem s);
 
     default void partialUpdate(OrderItem entity, OrderItemDTO dto) {
-        OrderMapperImpl orderMapper = new OrderMapperImpl();
         if (dto == null) {
             return;
         }
