@@ -1,6 +1,7 @@
 package com.gachokaerick.eshop.orders.service;
 
 import com.gachokaerick.eshop.orders.domain.aggregates.order.Payment;
+import com.gachokaerick.eshop.orders.domain.aggregates.order.PaymentDomain;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.PaymentMapper;
 import com.gachokaerick.eshop.orders.repository.PaymentRepository;
 import com.gachokaerick.eshop.orders.service.dto.PaymentDTO;
@@ -38,7 +39,7 @@ public class PaymentService {
      */
     public PaymentDTO save(PaymentDTO paymentDTO) {
         log.debug("Request to save Payment : {}", paymentDTO);
-        Payment payment = paymentMapper.toEntity(paymentDTO);
+        Payment payment = new PaymentDomain.PaymentBuilder().withDTO(paymentDTO).build().getPayment();
         payment = paymentRepository.save(payment);
         return paymentMapper.toDto(payment);
     }

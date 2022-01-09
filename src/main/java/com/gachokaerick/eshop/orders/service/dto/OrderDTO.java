@@ -4,9 +4,10 @@ import com.gachokaerick.eshop.orders.domain.aggregates.order.Order;
 import com.gachokaerick.eshop.orders.domain.enumeration.OrderStatus;
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Objects;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link Order} entity.
@@ -27,6 +28,10 @@ public class OrderDTO implements Serializable {
     private AddressDTO address;
 
     private BuyerDTO buyer;
+
+    private BigDecimal total;
+
+    private BigDecimal balance;
 
     public Long getId() {
         return id;
@@ -76,6 +81,22 @@ public class OrderDTO implements Serializable {
         this.buyer = buyer;
     }
 
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -98,15 +119,18 @@ public class OrderDTO implements Serializable {
     }
 
     // prettier-ignore
+
     @Override
     public String toString() {
         return "OrderDTO{" +
-            "id=" + getId() +
-            ", orderDate='" + getOrderDate() + "'" +
-            ", orderStatus='" + getOrderStatus() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", address=" + getAddress() +
-            ", buyer=" + getBuyer() +
-            "}";
+            "id=" + id +
+            ", orderDate=" + orderDate +
+            ", orderStatus=" + orderStatus +
+            ", description='" + description + '\'' +
+            ", address=" + address +
+            ", buyer=" + buyer +
+            ", total=" + total +
+            ", balance=" + balance +
+            '}';
     }
 }

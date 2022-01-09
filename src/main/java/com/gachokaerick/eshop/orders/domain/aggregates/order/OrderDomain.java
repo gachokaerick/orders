@@ -3,8 +3,9 @@ package com.gachokaerick.eshop.orders.domain.aggregates.order;
 import com.gachokaerick.eshop.orders.domain.exception.DomainException;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
 import com.gachokaerick.eshop.orders.service.dto.OrderItemDTO;
+import com.gachokaerick.eshop.orders.service.dto.PaymentDTO;
+import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
-import liquibase.pro.packaged.O;
 
 public class OrderDomain {
 
@@ -32,9 +33,35 @@ public class OrderDomain {
     }
 
     public void addOrderItem(OrderItemDTO orderItemDTO) {
-        Order order = getOrder();
         OrderItemDomain orderItemDomain = new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build();
         order.addOrderItems(orderItemDomain.getOrderItem());
+    }
+
+    public void addPayment(PaymentDTO paymentDTO) {
+        PaymentDomain paymentDomain = new PaymentDomain.PaymentBuilder().withDTO(paymentDTO).build();
+        order.addPayments(paymentDomain.getPayment());
+    }
+
+    public BigDecimal calculateItemsTotal(Order order) {
+        BigDecimal total = BigDecimal.ZERO;
+        for (OrderItem orderItem : order.getOrderItems()) {
+            BigDecimal itemTotal =
+                (orderItem.getUnitPrice().multiply(BigDecimal.valueOf(orderItem.getUnits()))).subtract(orderItem.getDiscount());
+            total = total.add(itemTotal);
+        }
+        return total;
+    }
+
+    public BigDecimal calculateTotalPaid(Order order) {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Payment payment : order.getPayments()) {
+            total = total.add(payment.getAmount());
+        }
+        return total;
+    }
+
+    public BigDecimal calculateOrderBalance(Order order) {
+        return calculateTotalPaid(order).subtract(calculateItemsTotal(order));
     }
 
     public static class OrderBuilder {

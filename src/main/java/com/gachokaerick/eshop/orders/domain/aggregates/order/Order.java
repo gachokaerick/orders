@@ -5,11 +5,12 @@ import com.gachokaerick.eshop.orders.domain.Address;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
 import com.gachokaerick.eshop.orders.domain.enumeration.OrderStatus;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -63,6 +64,12 @@ public class Order implements Serializable {
 
     @Transient
     private Buyer buyer;
+
+    @Transient
+    private BigDecimal total;
+
+    @Transient
+    private BigDecimal balance;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -217,6 +224,22 @@ public class Order implements Serializable {
     Order buyer(Buyer buyer) {
         this.setBuyer(buyer);
         return this;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

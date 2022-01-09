@@ -2,6 +2,7 @@ package com.gachokaerick.eshop.orders.domain.aggregates.order;
 
 import com.gachokaerick.eshop.orders.domain.exception.DomainException;
 import com.gachokaerick.eshop.orders.service.dto.OrderItemDTO;
+import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
 
 public class OrderItemDomain {
@@ -60,6 +61,9 @@ public class OrderItemDomain {
             }
             if (orderItemDTO.getUnitPrice() == null) {
                 throw DomainException.throwDomainException(domainName, "unit price cannot be null");
+            }
+            if (orderItemDTO.getUnitPrice().compareTo(BigDecimal.ZERO) < 1) {
+                throw DomainException.throwDomainException(domainName, "unit price must be greater than zero");
             }
             if (orderItemDTO.getDiscount() == null) {
                 throw DomainException.throwDomainException(domainName, "discount cannot be null");

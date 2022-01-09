@@ -44,4 +44,11 @@ public interface OrderMapper extends EntityMapper<OrderDTO, Order> {
             entity.setDescription(dto.getDescription());
         }
     }
+
+    @AfterMapping
+    default void setBalanceAndTotal(@MappingTarget OrderDTO orderDTO, Order order) {
+        OrderDomain orderDomain = new OrderDomain.OrderBuilder().withOrderDTO(orderDTO).build();
+        orderDTO.setTotal(orderDomain.calculateItemsTotal(order));
+        orderDTO.setBalance(orderDomain.calculateOrderBalance(order));
+    }
 }
