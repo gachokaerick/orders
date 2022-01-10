@@ -51,7 +51,7 @@ public class Buyer implements Serializable {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = { CascadeType.PERSIST })
     @NotNull
     @JoinColumn(unique = true)
     private User user;

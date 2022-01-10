@@ -24,7 +24,7 @@ public class BuyerDomain {
         buyer.setEmail(buyerDTO.getEmail());
         buyer.setPhone(buyerDTO.getPhone());
         if (buyerDTO.getUser() != null) {
-            buyer.setUser(userMapper.userFromId(buyerDTO.getUser().getId()));
+            buyer.setUser(userMapper.newUserFromDTO(buyerDTO.getUser()));
         }
         return buyer;
     }

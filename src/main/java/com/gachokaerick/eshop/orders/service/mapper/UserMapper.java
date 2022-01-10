@@ -86,6 +86,17 @@ public class UserMapper {
         return user;
     }
 
+    public User newUserFromDTO(UserDTO userDTO) {
+        if (userDTO.getId() == null || userDTO.getLogin() == null) {
+            return null;
+        }
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setLogin(userDTO.getLogin());
+        user.setActivated(true);
+        return user;
+    }
+
     @Named("id")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
