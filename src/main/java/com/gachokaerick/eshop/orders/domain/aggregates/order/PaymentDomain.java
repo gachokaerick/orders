@@ -34,7 +34,7 @@ public class PaymentDomain {
         payment.setCurrency(paymentDTO.getCurrency());
         payment.setAmount(paymentDTO.getAmount());
         payment.setPaymentId(paymentDTO.getPaymentId());
-        if (orderDomain != null) {
+        if (paymentDTO.getId() == null && orderDomain != null) {
             payment.setOrder(orderDomain.getOrder());
         }
         return payment;

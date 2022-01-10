@@ -28,9 +28,9 @@ public class OrderItemDomain {
         orderItem.setPictureUrl(orderItemDTO.getPictureUrl());
         orderItem.setUnitPrice(orderItemDTO.getUnitPrice());
         orderItem.setDiscount(orderItemDTO.getDiscount());
-        orderItem.setUnits(orderItem.getUnits());
-        orderItem.setProductId(orderItem.getProductId());
-        if (orderDomain != null) {
+        orderItem.setUnits(orderItemDTO.getUnits());
+        orderItem.setProductId(orderItemDTO.getProductId());
+        if (orderItemDTO.getId() == null && orderDomain != null) {
             orderItem.setOrder(orderDomain.getOrder());
         }
 

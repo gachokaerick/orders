@@ -6,6 +6,7 @@ import com.gachokaerick.eshop.orders.service.dto.OrderItemDTO;
 import com.gachokaerick.eshop.orders.service.dto.PaymentDTO;
 import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
+import liquibase.pro.packaged.O;
 
 public class OrderDomain {
 
@@ -19,14 +20,14 @@ public class OrderDomain {
     }
 
     public Order getOrder() {
-        order.setId(order.getId());
+        order.setId(orderDTO.getId());
         order.setOrderDate(orderDTO.getOrderDate());
         order.setOrderStatus(orderDTO.getOrderStatus());
         order.setDescription(orderDTO.getDescription());
-        if (orderDTO.getAddress() != null) {
+        if (orderDTO.getId() == null && orderDTO.getAddress() != null) {
             order.setAddress(orderDTO.getAddress().toEntity());
         }
-        if (orderDTO.getBuyer() != null) {
+        if (orderDTO.getId() == null && orderDTO.getBuyer() != null) {
             order.setBuyerId(orderDTO.getBuyer().getId());
         }
         return order;
