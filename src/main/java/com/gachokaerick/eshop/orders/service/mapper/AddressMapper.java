@@ -1,7 +1,10 @@
 package com.gachokaerick.eshop.orders.service.mapper;
 
 import com.gachokaerick.eshop.orders.domain.Address;
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerDomain;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerMapper;
+import com.gachokaerick.eshop.orders.domain.exception.DomainException;
 import com.gachokaerick.eshop.orders.service.dto.AddressDTO;
 import org.mapstruct.*;
 
@@ -18,4 +21,28 @@ public interface AddressMapper extends EntityMapper<AddressDTO, Address> {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "town", source = "town")
     AddressDTO toDtoTown(Address address);
+
+    default Address toEntity(AddressDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        if (dto.getId() == null && dto.getBuyer() == null) {
+            throw DomainException.throwDomainException("AddressVO", "buyer must exist for new address item");
+        }
+        if (dto.getBuyer() != null && dto.getBuyer().getId() == null) {
+            throw DomainException.throwDomainException("AddressVO", "buyer entity for an address item must have an ID");
+        }
+
+        Buyer buyer = new BuyerDomain.BuyerBuilder().withDTO(dto.getBuyer()).build().getBuyer();
+        Address address = new Address();
+
+        address.setId(dto.getId());
+        address.setStreet(dto.getStreet());
+        address.setCity(dto.getCity());
+        address.setTown(dto.getTown());
+        address.setCountry(dto.getCountry());
+        address.setZipcode(dto.getZipcode());
+        address.setBuyer(buyer);
+        return address;
+    }
 }

@@ -1,6 +1,8 @@
 package com.gachokaerick.eshop.orders.service;
 
 import com.gachokaerick.eshop.orders.domain.Address;
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerDomain;
 import com.gachokaerick.eshop.orders.repository.AddressRepository;
 import com.gachokaerick.eshop.orders.service.dto.AddressDTO;
 import com.gachokaerick.eshop.orders.service.mapper.AddressMapper;
