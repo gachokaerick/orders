@@ -80,10 +80,10 @@ public class OrderDomain {
                 throw DomainException.throwDomainException(domainName, "catalogItemDTO cannot be null");
             }
 
-            if (orderDTO.getOrderDate() == null) {
+            if (orderDTO.getId() == null && orderDTO.getOrderDate() == null) {
                 throw DomainException.throwDomainException(domainName, "orderDate cannot be null");
             }
-            if (orderDTO.getOrderStatus() == null) {
+            if (orderDTO.getId() == null && orderDTO.getOrderStatus() == null) {
                 throw DomainException.throwDomainException(domainName, "orderStatus cannot be null");
             }
             if (orderDTO.getId() == null && orderDTO.getAddress() == null) {

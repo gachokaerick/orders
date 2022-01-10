@@ -56,22 +56,22 @@ public class PaymentDomain {
                 throw DomainException.throwDomainException(domainName, "payment dto cannot be null");
             }
 
-            if (paymentDTO.getCreateTime() == null) {
+            if (paymentDTO.getId() == null && paymentDTO.getCreateTime() == null) {
                 throw DomainException.throwDomainException(domainName, "create time cannot be null");
             }
-            if (paymentDTO.getUpdateTime() == null) {
+            if (paymentDTO.getId() == null && paymentDTO.getUpdateTime() == null) {
                 throw DomainException.throwDomainException(domainName, "update time cannot be null");
             }
-            if (paymentDTO.getPayerName() == null) {
+            if (paymentDTO.getId() == null && paymentDTO.getPayerName() == null) {
                 throw DomainException.throwDomainException(domainName, "payer name cannot be null");
             }
-            if (paymentDTO.getPayerId() == null) {
+            if (paymentDTO.getId() == null && paymentDTO.getPayerId() == null) {
                 throw DomainException.throwDomainException(domainName, "payer ID cannot be null");
             }
-            if (paymentDTO.getCurrency() == null) {
+            if (paymentDTO.getId() == null && paymentDTO.getCurrency() == null) {
                 throw DomainException.throwDomainException(domainName, "currency cannot be null");
             }
-            if (paymentDTO.getAmount() == null || paymentDTO.getAmount().compareTo(BigDecimal.ZERO) < 1) {
+            if (paymentDTO.getId() == null && (paymentDTO.getAmount() == null || paymentDTO.getAmount().compareTo(BigDecimal.ZERO) < 1)) {
                 throw DomainException.throwDomainException(domainName, "amount paid must be greater than zero");
             }
             if (paymentDTO.getId() == null && paymentDTO.getOrder() == null) {

@@ -44,38 +44,34 @@ public class BuyerDomain {
             EmailValidator validator = new EmailValidator();
 
             if (buyerDTO == null) {
-                throwDomainException("buyer dto cannot be null");
+                throw DomainException.throwDomainException(domainName, " buyer dto cannot be null");
             }
-            if (buyerDTO.getFirstName() == null) {
-                throwDomainException("first name cannot be null");
+            if (buyerDTO.getId() == null && buyerDTO.getFirstName() == null) {
+                throw DomainException.throwDomainException(domainName, " first name cannot be null");
             }
-            if (buyerDTO.getLastName() == null) {
-                throwDomainException("last name cannot be null");
+            if (buyerDTO.getId() == null && buyerDTO.getLastName() == null) {
+                throw DomainException.throwDomainException(domainName, " last name cannot be null");
             }
-            if (buyerDTO.getGender() == null) {
-                throwDomainException("gender cannot be null");
+            if (buyerDTO.getId() == null && buyerDTO.getGender() == null) {
+                throw DomainException.throwDomainException(domainName, " gender cannot be null");
             }
-            if (buyerDTO.getEmail() == null) {
-                throwDomainException("email cannot be null");
+            if (buyerDTO.getId() == null && buyerDTO.getEmail() == null) {
+                throw DomainException.throwDomainException(domainName, " email cannot be null");
             }
-            if (!validator.validate(buyerDTO.getEmail())) {
-                throwDomainException("email is invalid");
+            if (buyerDTO.getId() == null && !validator.validate(buyerDTO.getEmail())) {
+                throw DomainException.throwDomainException(domainName, " email is invalid");
             }
-            if (buyerDTO.getPhone() == null) {
-                throwDomainException("phone cannot be null");
+            if (buyerDTO.getId() == null && buyerDTO.getPhone() == null) {
+                throw DomainException.throwDomainException(domainName, " phone cannot be null");
             }
             if (buyerDTO.getId() == null && buyerDTO.getUser() == null) {
-                throwDomainException("user dto cannot be null");
+                throw DomainException.throwDomainException(domainName, " user dto cannot be null");
             }
             if (buyerDTO.getUser() != null && buyerDTO.getUser().getId() == null) {
-                throwDomainException("user id cannot be null");
+                throw DomainException.throwDomainException(domainName, " user id cannot be null");
             }
 
             return true;
-        }
-
-        private void throwDomainException(String message) {
-            throw DomainException.throwDomainException(domainName, message);
         }
 
         public BuyerDomain build() {

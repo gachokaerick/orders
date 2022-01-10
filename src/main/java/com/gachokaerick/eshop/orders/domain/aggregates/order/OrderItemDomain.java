@@ -53,25 +53,25 @@ public class OrderItemDomain {
                 throw DomainException.throwDomainException(domainName, "order item cannot be null");
             }
 
-            if (orderItemDTO.getProductName() == null) {
+            if (orderItemDTO.getId() == null && orderItemDTO.getProductName() == null) {
                 throw DomainException.throwDomainException(domainName, "product name cannot be null");
             }
-            if (orderItemDTO.getPictureUrl() == null) {
+            if (orderItemDTO.getId() == null && orderItemDTO.getPictureUrl() == null) {
                 throw DomainException.throwDomainException(domainName, "picture url cannot be null");
             }
-            if (orderItemDTO.getUnitPrice() == null) {
+            if (orderItemDTO.getId() == null && orderItemDTO.getUnitPrice() == null) {
                 throw DomainException.throwDomainException(domainName, "unit price cannot be null");
             }
-            if (orderItemDTO.getUnitPrice().compareTo(BigDecimal.ZERO) < 1) {
+            if (orderItemDTO.getId() == null && orderItemDTO.getUnitPrice().compareTo(BigDecimal.ZERO) < 1) {
                 throw DomainException.throwDomainException(domainName, "unit price must be greater than zero");
             }
-            if (orderItemDTO.getDiscount() == null) {
+            if (orderItemDTO.getId() == null && orderItemDTO.getDiscount() == null) {
                 throw DomainException.throwDomainException(domainName, "discount cannot be null");
             }
-            if (orderItemDTO.getUnits() == null) {
+            if (orderItemDTO.getId() == null && orderItemDTO.getUnits() == null) {
                 throw DomainException.throwDomainException(domainName, "units cannot be null");
             }
-            if (orderItemDTO.getProductId() == null) {
+            if (orderItemDTO.getId() == null && orderItemDTO.getProductId() == null) {
                 throw DomainException.throwDomainException(domainName, "product id cannot be null");
             }
             if (orderItemDTO.getId() == null && orderItemDTO.getOrder() == null) {
