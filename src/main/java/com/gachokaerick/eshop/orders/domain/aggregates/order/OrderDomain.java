@@ -2,6 +2,7 @@ package com.gachokaerick.eshop.orders.domain.aggregates.order;
 
 import com.gachokaerick.eshop.orders.domain.Address;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
+import com.gachokaerick.eshop.orders.domain.enumeration.OrderStatus;
 import com.gachokaerick.eshop.orders.domain.exception.DomainException;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
 import java.math.BigDecimal;
@@ -29,7 +30,7 @@ public class OrderDomain {
             orderMapper.partialUpdate(order, orderDTO);
         } else {
             order.setOrderDate(orderDTO.getOrderDate());
-            order.setOrderStatus(orderDTO.getOrderStatus());
+            order.setOrderStatus(OrderStatus.DRAFT);
             order.setDescription(orderDTO.getDescription());
             order.setAddress(orderDTO.getAddress().toEntity());
             order.setBuyerId(orderDTO.getBuyer().getId());
