@@ -1,11 +1,9 @@
 package com.gachokaerick.eshop.orders.service;
 
-import com.gachokaerick.eshop.orders.domain.aggregates.order.Order;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderItem;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderItemDomain;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderItemMapper;
 import com.gachokaerick.eshop.orders.repository.OrderItemRepository;
-import com.gachokaerick.eshop.orders.repository.OrderRepository;
 import com.gachokaerick.eshop.orders.service.dto.OrderItemDTO;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -25,13 +23,13 @@ public class OrderItemService {
     private final Logger log = LoggerFactory.getLogger(OrderItemService.class);
 
     private final OrderItemRepository orderItemRepository;
-    private final OrderRepository orderRepository;
     private final OrderItemMapper orderItemMapper;
+    private final OrderService orderService;
 
-    public OrderItemService(OrderItemRepository orderItemRepository, OrderRepository orderRepository, OrderItemMapper orderItemMapper) {
+    public OrderItemService(OrderItemRepository orderItemRepository, OrderItemMapper orderItemMapper, OrderService orderService) {
         this.orderItemRepository = orderItemRepository;
-        this.orderRepository = orderRepository;
         this.orderItemMapper = orderItemMapper;
+        this.orderService = orderService;
     }
 
     /**
@@ -46,12 +44,10 @@ public class OrderItemService {
         OrderItem orderItem;
         if (orderItemDTO.getId() != null) {
             orderItem = orderItemDomain.toEntity(orderItemRepository.getById(orderItemDTO.getId()));
+            orderItem = orderItemRepository.save(orderItem);
         } else {
-            orderItem = orderItemDomain.toEntity(null);
-            Order order = orderRepository.getById(orderItemDTO.getOrder().getId());
-            orderItem = orderItemDomain.setOrder(orderItem, order);
+            orderItem = orderService.addOrderItem(orderItemDomain);
         }
-        orderItem = orderItemRepository.save(orderItem);
         return orderItemMapper.toDto(orderItem);
     }
 
@@ -106,6 +102,6 @@ public class OrderItemService {
      */
     public void delete(Long id) {
         log.debug("Request to delete OrderItem : {}", id);
-        orderItemRepository.deleteById(id);
+        orderService.deleteOrderItem(id);
     }
 }

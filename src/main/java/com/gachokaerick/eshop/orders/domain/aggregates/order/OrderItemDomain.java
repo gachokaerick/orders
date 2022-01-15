@@ -42,14 +42,6 @@ public class OrderItemDomain {
         return orderItem;
     }
 
-    public OrderItem setOrder(OrderItem orderItem, Order order) {
-        if (order == null || order.getId() == null) {
-            throw DomainException.throwDomainException(domainName, "Order for an order item must exist");
-        }
-        orderItem.setOrder(order);
-        return orderItem;
-    }
-
     public static class OrderItemBuilder {
 
         private OrderItemDTO orderItemDTO;

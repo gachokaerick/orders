@@ -1,10 +1,9 @@
 package com.gachokaerick.eshop.orders.service;
 
 import com.gachokaerick.eshop.orders.domain.Address;
-import com.gachokaerick.eshop.orders.domain.aggregates.order.Order;
-import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderDomain;
-import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderMapper;
+import com.gachokaerick.eshop.orders.domain.aggregates.order.*;
 import com.gachokaerick.eshop.orders.repository.AddressRepository;
+import com.gachokaerick.eshop.orders.repository.OrderItemRepository;
 import com.gachokaerick.eshop.orders.repository.OrderRepository;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
 import java.util.Optional;
@@ -27,11 +26,18 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final AddressRepository addressRepository;
     private final OrderMapper orderMapper;
+    private final OrderItemRepository orderItemRepository;
 
-    public OrderService(OrderRepository orderRepository, AddressRepository addressRepository, OrderMapper orderMapper) {
+    public OrderService(
+        OrderRepository orderRepository,
+        AddressRepository addressRepository,
+        OrderMapper orderMapper,
+        OrderItemRepository orderItemRepository
+    ) {
         this.orderRepository = orderRepository;
         this.addressRepository = addressRepository;
         this.orderMapper = orderMapper;
+        this.orderItemRepository = orderItemRepository;
     }
 
     /**
@@ -54,6 +60,25 @@ public class OrderService {
 
         order = orderRepository.save(order);
         return orderMapper.toDto(order);
+    }
+
+    public OrderItem addOrderItem(OrderItemDomain orderItemDomain) {
+        OrderItem orderItem = orderItemDomain.toEntity(null);
+        Order order = orderRepository.getById(orderItem.getOrder().getId());
+        OrderDomain orderDomain = new OrderDomain.OrderBuilder().withOrderDTO(orderMapper.toDto(order)).build();
+        orderDomain.addOrderItem(order, orderItem);
+        orderItem = orderItemRepository.save(orderItem);
+        orderRepository.save(order);
+        return orderItem;
+    }
+
+    public void deleteOrderItem(Long orderItemId) {
+        OrderItem orderItem = orderItemRepository.getById(orderItemId);
+        Order order = orderItem.getOrder();
+        OrderDomain orderDomain = new OrderDomain.OrderBuilder().withOrderDTO(orderMapper.toDto(order)).build();
+        orderDomain.removeOrderItem(order, orderItem);
+        orderRepository.save(order);
+        orderItemRepository.deleteById(orderItemId);
     }
 
     /**

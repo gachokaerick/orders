@@ -142,6 +142,10 @@ public class Order implements Serializable {
         return this.orderItems;
     }
 
+    public OrderItem findOrderItem(@NotNull String productName) {
+        return this.getOrderItems().stream().filter(it -> it.getProductName().equals(productName)).findFirst().orElse(null);
+    }
+
     void setOrderItems(Set<OrderItem> orderItems) {
         if (this.orderItems != null) {
             this.orderItems.forEach(i -> i.setOrder(null));

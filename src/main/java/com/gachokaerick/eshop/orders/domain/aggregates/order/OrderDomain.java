@@ -58,7 +58,7 @@ public class OrderDomain {
     }
 
     public BigDecimal calculateOrderBalance(Order order) {
-        return calculateTotalPaid(order).subtract(calculateItemsTotal(order));
+        return calculateItemsTotal(order).subtract(calculateTotalPaid(order));
     }
 
     public Order setAddress(Order order, Address address) {
@@ -67,6 +67,14 @@ public class OrderDomain {
         }
         order.setAddress(address);
         return order;
+    }
+
+    public void addOrderItem(Order order, OrderItem orderItem) {
+        order.addOrderItems(orderItem);
+    }
+
+    public void removeOrderItem(Order order, OrderItem orderItem) {
+        order.removeOrderItems(orderItem);
     }
 
     public static class OrderBuilder {
