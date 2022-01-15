@@ -2,6 +2,7 @@ package com.gachokaerick.eshop.orders.domain.aggregates.order;
 
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerMapper;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerMapperImpl;
+import com.gachokaerick.eshop.orders.service.dto.BuyerDTO;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
 import com.gachokaerick.eshop.orders.service.mapper.AddressMapper;
 import com.gachokaerick.eshop.orders.service.mapper.AddressMapperImpl;
@@ -50,5 +51,8 @@ public interface OrderMapper extends EntityMapper<OrderDTO, Order> {
         OrderDomain orderDomain = new OrderDomain.OrderBuilder().withOrderDTO(orderDTO).build();
         orderDTO.setTotal(orderDomain.calculateItemsTotal(order));
         orderDTO.setBalance(orderDomain.calculateOrderBalance(order));
+        BuyerDTO buyerDTO = new BuyerDTO();
+        buyerDTO.setId(order.getBuyerId());
+        orderDTO.setBuyer(buyerDTO);
     }
 }
