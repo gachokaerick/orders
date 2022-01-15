@@ -343,7 +343,7 @@
 //
 //    @Test
 //    @Transactional
-//    void getOrderItem() throws Exception {
+//    void toEntity() throws Exception {
 //        // Initialize the database
 //        orderItemRepository.saveAndFlush(orderItem);
 //

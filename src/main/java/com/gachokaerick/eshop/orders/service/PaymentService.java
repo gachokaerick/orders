@@ -1,8 +1,10 @@
 package com.gachokaerick.eshop.orders.service;
 
+import com.gachokaerick.eshop.orders.domain.aggregates.order.Order;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.Payment;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.PaymentDomain;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.PaymentMapper;
+import com.gachokaerick.eshop.orders.repository.OrderRepository;
 import com.gachokaerick.eshop.orders.repository.PaymentRepository;
 import com.gachokaerick.eshop.orders.service.dto.PaymentDTO;
 import java.util.Optional;
@@ -25,10 +27,12 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
 
     private final PaymentMapper paymentMapper;
+    private final OrderRepository orderRepository;
 
-    public PaymentService(PaymentRepository paymentRepository, PaymentMapper paymentMapper) {
+    public PaymentService(PaymentRepository paymentRepository, PaymentMapper paymentMapper, OrderRepository orderRepository) {
         this.paymentRepository = paymentRepository;
         this.paymentMapper = paymentMapper;
+        this.orderRepository = orderRepository;
     }
 
     /**
@@ -39,7 +43,16 @@ public class PaymentService {
      */
     public PaymentDTO save(PaymentDTO paymentDTO) {
         log.debug("Request to save Payment : {}", paymentDTO);
-        Payment payment = new PaymentDomain.PaymentBuilder().withDTO(paymentDTO).build().getPayment();
+        PaymentDomain paymentDomain = new PaymentDomain.PaymentBuilder().withDTO(paymentDTO).build();
+        Payment payment;
+        if (paymentDTO.getId() != null) {
+            payment = paymentDomain.toEntity(paymentRepository.getById(paymentDTO.getId()));
+        } else {
+            payment = paymentDomain.toEntity(null);
+            Order order = orderRepository.getById(paymentDTO.getOrder().getId());
+            payment = paymentDomain.setOrder(payment, order);
+        }
+
         payment = paymentRepository.save(payment);
         return paymentMapper.toDto(payment);
     }

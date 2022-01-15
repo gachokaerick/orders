@@ -1,8 +1,10 @@
 package com.gachokaerick.eshop.orders.service;
 
+import com.gachokaerick.eshop.orders.domain.Address;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.Order;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderDomain;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderMapper;
+import com.gachokaerick.eshop.orders.repository.AddressRepository;
 import com.gachokaerick.eshop.orders.repository.OrderRepository;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
 import java.util.Optional;
@@ -23,11 +25,12 @@ public class OrderService {
     private final Logger log = LoggerFactory.getLogger(OrderService.class);
 
     private final OrderRepository orderRepository;
-
+    private final AddressRepository addressRepository;
     private final OrderMapper orderMapper;
 
-    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper) {
+    public OrderService(OrderRepository orderRepository, AddressRepository addressRepository, OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
+        this.addressRepository = addressRepository;
         this.orderMapper = orderMapper;
     }
 
@@ -39,7 +42,16 @@ public class OrderService {
      */
     public OrderDTO save(OrderDTO orderDTO) {
         log.debug("Request to save Order : {}", orderDTO);
-        Order order = new OrderDomain.OrderBuilder().withOrderDTO(orderDTO).build().getOrder();
+        OrderDomain orderDomain = new OrderDomain.OrderBuilder().withOrderDTO(orderDTO).build();
+        Order order;
+        if (orderDTO.getId() != null) {
+            order = orderDomain.toEntity(orderRepository.getById(orderDTO.getId()));
+        } else {
+            order = orderDomain.toEntity(null);
+            Address address = addressRepository.getById(orderDTO.getAddress().getId());
+            order = orderDomain.setAddress(order, address);
+        }
+
         order = orderRepository.save(order);
         return orderMapper.toDto(order);
     }

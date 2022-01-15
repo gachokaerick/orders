@@ -1,12 +1,11 @@
 package com.gachokaerick.eshop.orders.domain.aggregates.order;
 
+import com.gachokaerick.eshop.orders.domain.Address;
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
 import com.gachokaerick.eshop.orders.domain.exception.DomainException;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
-import com.gachokaerick.eshop.orders.service.dto.OrderItemDTO;
-import com.gachokaerick.eshop.orders.service.dto.PaymentDTO;
 import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
-import liquibase.pro.packaged.O;
 
 public class OrderDomain {
 
@@ -14,33 +13,29 @@ public class OrderDomain {
 
     private final OrderDTO orderDTO;
     private final Order order = new Order();
+    private final OrderMapperImpl orderMapper = new OrderMapperImpl();
 
     private OrderDomain(OrderBuilder builder) {
         orderDTO = builder.orderDTO;
     }
 
-    public Order getOrder() {
-        order.setId(orderDTO.getId());
-        order.setOrderDate(orderDTO.getOrderDate());
-        order.setOrderStatus(orderDTO.getOrderStatus());
-        order.setDescription(orderDTO.getDescription());
-        if (orderDTO.getId() == null && orderDTO.getAddress() != null) {
-            order.setAddress(orderDTO.getAddress().toEntity());
+    public Order toEntity(Order order) {
+        if (order == null) {
+            order = new Order();
         }
-        if (orderDTO.getId() == null && orderDTO.getBuyer() != null) {
+
+        if (orderDTO.getId() != null) {
+            order.setId(orderDTO.getId());
+            orderMapper.partialUpdate(order, orderDTO);
+        } else {
+            order.setOrderDate(orderDTO.getOrderDate());
+            order.setOrderStatus(orderDTO.getOrderStatus());
+            order.setDescription(orderDTO.getDescription());
+            order.setAddress(orderDTO.getAddress().toEntity());
             order.setBuyerId(orderDTO.getBuyer().getId());
         }
+
         return order;
-    }
-
-    public void addOrderItem(OrderItemDTO orderItemDTO) {
-        OrderItemDomain orderItemDomain = new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build();
-        order.addOrderItems(orderItemDomain.getOrderItem());
-    }
-
-    public void addPayment(PaymentDTO paymentDTO) {
-        PaymentDomain paymentDomain = new PaymentDomain.PaymentBuilder().withDTO(paymentDTO).build();
-        order.addPayments(paymentDomain.getPayment());
     }
 
     public BigDecimal calculateItemsTotal(Order order) {
@@ -65,6 +60,14 @@ public class OrderDomain {
         return calculateTotalPaid(order).subtract(calculateItemsTotal(order));
     }
 
+    public Order setAddress(Order order, Address address) {
+        if (address == null || address.getId() == null) {
+            throw DomainException.throwDomainException(domainName, "Address for an order must exist");
+        }
+        order.setAddress(address);
+        return order;
+    }
+
     public static class OrderBuilder {
 
         private OrderDTO orderDTO;
@@ -78,26 +81,26 @@ public class OrderDomain {
 
         private boolean isAcceptable() {
             if (this.orderDTO == null) {
-                throw DomainException.throwDomainException(domainName, "catalogItemDTO cannot be null");
+                throw DomainException.throwDomainException(domainName, "catalogItemDTO is required");
             }
 
             if (orderDTO.getId() == null && orderDTO.getOrderDate() == null) {
-                throw DomainException.throwDomainException(domainName, "orderDate cannot be null");
+                throw DomainException.throwDomainException(domainName, "orderDate is required");
             }
             if (orderDTO.getId() == null && orderDTO.getOrderStatus() == null) {
-                throw DomainException.throwDomainException(domainName, "orderStatus cannot be null");
+                throw DomainException.throwDomainException(domainName, "orderStatus is required");
             }
             if (orderDTO.getId() == null && orderDTO.getAddress() == null) {
-                throw DomainException.throwDomainException(domainName, "address cannot be null");
+                throw DomainException.throwDomainException(domainName, "address is required");
             }
-            if (orderDTO.getId() == null && orderDTO.getAddress().getId() == null) {
-                throw DomainException.throwDomainException(domainName, "address id cannot be null");
+            if (orderDTO.getAddress() != null && orderDTO.getAddress().getId() == null) {
+                throw DomainException.throwDomainException(domainName, "address id is required");
             }
             if (orderDTO.getId() == null && orderDTO.getBuyer() == null) {
-                throw DomainException.throwDomainException(domainName, "buyer cannot be null");
+                throw DomainException.throwDomainException(domainName, "buyer is required");
             }
             if (orderDTO.getBuyer() != null && orderDTO.getBuyer().getId() == null) {
-                throw DomainException.throwDomainException(domainName, "buyer id cannot be null");
+                throw DomainException.throwDomainException(domainName, "buyer id is required");
             }
             return true;
         }

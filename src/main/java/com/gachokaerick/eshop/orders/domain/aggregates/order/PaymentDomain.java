@@ -10,6 +10,7 @@ public class PaymentDomain {
 
     private final PaymentDTO paymentDTO;
     private final OrderDomain orderDomain;
+    private final PaymentMapperImpl paymentMapper = new PaymentMapperImpl();
 
     private PaymentDomain(PaymentBuilder builder) {
         this.paymentDTO = builder.paymentDTO;
@@ -20,23 +21,36 @@ public class PaymentDomain {
         }
     }
 
-    public Payment getPayment() {
-        Payment payment = new Payment();
-        payment.setId(paymentDTO.getId());
-        payment.setCreateTime(paymentDTO.getCreateTime());
-        payment.setUpdateTime(paymentDTO.getUpdateTime());
-        payment.setPaymentStatus(paymentDTO.getPaymentStatus());
-        payment.setPayerCountryCode(paymentDTO.getPayerCountryCode());
-        payment.setPayerEmail(paymentDTO.getPayerEmail());
-        payment.setPayerName(paymentDTO.getPayerName());
-        payment.setPayerSurname(paymentDTO.getPayerSurname());
-        payment.setPayerId(paymentDTO.getPayerId());
-        payment.setCurrency(paymentDTO.getCurrency());
-        payment.setAmount(paymentDTO.getAmount());
-        payment.setPaymentId(paymentDTO.getPaymentId());
-        if (paymentDTO.getId() == null && orderDomain != null) {
-            payment.setOrder(orderDomain.getOrder());
+    public Payment toEntity(Payment payment) {
+        if (payment == null) {
+            payment = new Payment();
         }
+        if (paymentDTO.getId() != null) {
+            payment.setId(paymentDTO.getId());
+            paymentMapper.partialUpdate(payment, paymentDTO);
+        } else {
+            payment.setCreateTime(paymentDTO.getCreateTime());
+            payment.setUpdateTime(paymentDTO.getUpdateTime());
+            payment.setPaymentStatus(paymentDTO.getPaymentStatus());
+            payment.setPayerCountryCode(paymentDTO.getPayerCountryCode());
+            payment.setPayerEmail(paymentDTO.getPayerEmail());
+            payment.setPayerName(paymentDTO.getPayerName());
+            payment.setPayerSurname(paymentDTO.getPayerSurname());
+            payment.setPayerId(paymentDTO.getPayerId());
+            payment.setCurrency(paymentDTO.getCurrency());
+            payment.setAmount(paymentDTO.getAmount());
+            payment.setPaymentId(paymentDTO.getPaymentId());
+            payment.setOrder(orderDomain.toEntity(null));
+        }
+
+        return payment;
+    }
+
+    public Payment setOrder(Payment payment, Order order) {
+        if (order == null || order.getId() == null) {
+            throw DomainException.throwDomainException(domainName, "Order for a payment must exist");
+        }
+        payment.setOrder(order);
         return payment;
     }
 
@@ -53,32 +67,32 @@ public class PaymentDomain {
 
         private boolean isAcceptable() {
             if (paymentDTO == null) {
-                throw DomainException.throwDomainException(domainName, "payment dto cannot be null");
+                throw DomainException.throwDomainException(domainName, "payment dto is required");
             }
 
             if (paymentDTO.getId() == null && paymentDTO.getCreateTime() == null) {
-                throw DomainException.throwDomainException(domainName, "create time cannot be null");
+                throw DomainException.throwDomainException(domainName, "create time is required");
             }
             if (paymentDTO.getId() == null && paymentDTO.getUpdateTime() == null) {
-                throw DomainException.throwDomainException(domainName, "update time cannot be null");
+                throw DomainException.throwDomainException(domainName, "update time is required");
             }
             if (paymentDTO.getId() == null && paymentDTO.getPayerName() == null) {
-                throw DomainException.throwDomainException(domainName, "payer name cannot be null");
+                throw DomainException.throwDomainException(domainName, "payer name is required");
             }
             if (paymentDTO.getId() == null && paymentDTO.getPayerId() == null) {
-                throw DomainException.throwDomainException(domainName, "payer ID cannot be null");
+                throw DomainException.throwDomainException(domainName, "payer ID is required");
             }
             if (paymentDTO.getId() == null && paymentDTO.getCurrency() == null) {
-                throw DomainException.throwDomainException(domainName, "currency cannot be null");
+                throw DomainException.throwDomainException(domainName, "currency is required");
             }
             if (paymentDTO.getId() == null && (paymentDTO.getAmount() == null || paymentDTO.getAmount().compareTo(BigDecimal.ZERO) < 1)) {
                 throw DomainException.throwDomainException(domainName, "amount paid must be greater than zero");
             }
             if (paymentDTO.getId() == null && paymentDTO.getOrder() == null) {
-                throw DomainException.throwDomainException(domainName, "order for payment cannot be null");
+                throw DomainException.throwDomainException(domainName, "order for payment is required");
             }
             if (paymentDTO.getOrder() != null && paymentDTO.getOrder().getId() == null) {
-                throw DomainException.throwDomainException(domainName, "order ID for payment cannot be null");
+                throw DomainException.throwDomainException(domainName, "order ID for payment is required");
             }
 
             return true;
