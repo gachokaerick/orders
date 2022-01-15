@@ -50,7 +50,11 @@ public class PaymentDomain {
         if (order == null || order.getId() == null) {
             throw DomainException.throwDomainException(domainName, "Order for a payment must exist");
         }
+        if (order.getOrderItems().isEmpty()) {
+            throw DomainException.throwDomainException(domainName, "Cannot make a payment for an empty order");
+        }
         payment.setOrder(order);
+
         return payment;
     }
 
