@@ -1,10 +1,8 @@
 package com.gachokaerick.eshop.orders.service;
 
-import com.gachokaerick.eshop.orders.domain.aggregates.order.Order;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.Payment;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.PaymentDomain;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.PaymentMapper;
-import com.gachokaerick.eshop.orders.repository.OrderRepository;
 import com.gachokaerick.eshop.orders.repository.PaymentRepository;
 import com.gachokaerick.eshop.orders.service.dto.PaymentDTO;
 import java.util.Optional;
@@ -25,14 +23,13 @@ public class PaymentService {
     private final Logger log = LoggerFactory.getLogger(PaymentService.class);
 
     private final PaymentRepository paymentRepository;
-
+    private final OrderService orderService;
     private final PaymentMapper paymentMapper;
-    private final OrderRepository orderRepository;
 
-    public PaymentService(PaymentRepository paymentRepository, PaymentMapper paymentMapper, OrderRepository orderRepository) {
+    public PaymentService(PaymentRepository paymentRepository, OrderService orderService, PaymentMapper paymentMapper) {
         this.paymentRepository = paymentRepository;
+        this.orderService = orderService;
         this.paymentMapper = paymentMapper;
-        this.orderRepository = orderRepository;
     }
 
     /**
@@ -47,13 +44,11 @@ public class PaymentService {
         Payment payment;
         if (paymentDTO.getId() != null) {
             payment = paymentDomain.toEntity(paymentRepository.getById(paymentDTO.getId()));
+            payment = paymentRepository.save(payment);
         } else {
-            payment = paymentDomain.toEntity(null);
-            Order order = orderRepository.getById(paymentDTO.getOrder().getId());
-            payment = paymentDomain.setOrder(payment, order);
+            payment = orderService.addPayment(paymentDomain);
         }
 
-        payment = paymentRepository.save(payment);
         return paymentMapper.toDto(payment);
     }
 
@@ -108,6 +103,6 @@ public class PaymentService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Payment : {}", id);
-        paymentRepository.deleteById(id);
+        orderService.deletePayment(id);
     }
 }

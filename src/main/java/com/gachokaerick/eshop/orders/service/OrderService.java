@@ -5,6 +5,7 @@ import com.gachokaerick.eshop.orders.domain.aggregates.order.*;
 import com.gachokaerick.eshop.orders.repository.AddressRepository;
 import com.gachokaerick.eshop.orders.repository.OrderItemRepository;
 import com.gachokaerick.eshop.orders.repository.OrderRepository;
+import com.gachokaerick.eshop.orders.repository.PaymentRepository;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -27,17 +28,20 @@ public class OrderService {
     private final AddressRepository addressRepository;
     private final OrderMapper orderMapper;
     private final OrderItemRepository orderItemRepository;
+    private final PaymentRepository paymentRepository;
 
     public OrderService(
         OrderRepository orderRepository,
         AddressRepository addressRepository,
         OrderMapper orderMapper,
-        OrderItemRepository orderItemRepository
+        OrderItemRepository orderItemRepository,
+        PaymentRepository paymentRepository
     ) {
         this.orderRepository = orderRepository;
         this.addressRepository = addressRepository;
         this.orderMapper = orderMapper;
         this.orderItemRepository = orderItemRepository;
+        this.paymentRepository = paymentRepository;
     }
 
     /**
@@ -72,6 +76,16 @@ public class OrderService {
         return orderItem;
     }
 
+    public Payment addPayment(PaymentDomain paymentDomain) {
+        Payment payment = paymentDomain.toEntity(null);
+        Order order = orderRepository.getById(payment.getOrder().getId());
+        OrderDomain orderDomain = new OrderDomain.OrderBuilder().withOrderDTO(orderMapper.toDto(order)).build();
+        orderDomain.addPayment(order, payment);
+        payment = paymentRepository.save(payment);
+        orderRepository.save(order);
+        return payment;
+    }
+
     public void deleteOrderItem(Long orderItemId) {
         OrderItem orderItem = orderItemRepository.getById(orderItemId);
         Order order = orderItem.getOrder();
@@ -79,6 +93,15 @@ public class OrderService {
         orderDomain.removeOrderItem(order, orderItem);
         orderRepository.save(order);
         orderItemRepository.deleteById(orderItemId);
+    }
+
+    public void deletePayment(Long paymentId) {
+        Payment payment = paymentRepository.getById(paymentId);
+        Order order = payment.getOrder();
+        OrderDomain orderDomain = new OrderDomain.OrderBuilder().withOrderDTO(orderMapper.toDto(order)).build();
+        orderDomain.removePayment(order, payment);
+        orderRepository.save(order);
+        paymentRepository.deleteById(paymentId);
     }
 
     /**

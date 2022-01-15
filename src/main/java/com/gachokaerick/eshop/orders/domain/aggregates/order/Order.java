@@ -192,16 +192,14 @@ public class Order implements Serializable {
         return this;
     }
 
-    Order addPayments(Payment payment) {
+    void addPayments(Payment payment) {
         this.payments.add(payment);
         payment.setOrder(this);
-        return this;
     }
 
-    Order removePayments(Payment payment) {
+    void removePayments(Payment payment) {
         this.payments.remove(payment);
         payment.setOrder(null);
-        return this;
     }
 
     public Long getBuyerId() {

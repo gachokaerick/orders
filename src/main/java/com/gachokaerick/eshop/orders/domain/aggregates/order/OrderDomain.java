@@ -73,8 +73,16 @@ public class OrderDomain {
         order.addOrderItems(orderItem);
     }
 
+    public void addPayment(Order order, Payment payment) {
+        order.addPayments(payment);
+    }
+
     public void removeOrderItem(Order order, OrderItem orderItem) {
         order.removeOrderItems(orderItem);
+    }
+
+    public void removePayment(Order order, Payment payment) {
+        order.removePayments(payment);
     }
 
     public static class OrderBuilder {
