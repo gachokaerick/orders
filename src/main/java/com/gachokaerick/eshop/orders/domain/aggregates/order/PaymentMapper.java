@@ -28,7 +28,7 @@ public interface PaymentMapper extends EntityMapper<PaymentDTO, Payment> {
             entity.setCreateTime(dto.getCreateTime());
         }
         if (dto.getUpdateTime() != null) {
-            entity.setCreateTime(dto.getCreateTime());
+            entity.setUpdateTime(dto.getUpdateTime());
         }
         if (dto.getPaymentStatus() != null) {
             entity.setPaymentStatus(dto.getPaymentStatus());
@@ -41,6 +41,9 @@ public interface PaymentMapper extends EntityMapper<PaymentDTO, Payment> {
         }
         if (dto.getPayerName() != null) {
             entity.setPayerName(dto.getPayerName());
+        }
+        if (dto.getPayerSurname() != null) {
+            entity.setPayerSurname(dto.getPayerSurname());
         }
         if (dto.getPayerId() != null) {
             entity.setPayerId(dto.getPayerId());

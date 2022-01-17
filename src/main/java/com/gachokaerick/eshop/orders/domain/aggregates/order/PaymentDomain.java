@@ -22,11 +22,20 @@ public class PaymentDomain {
     }
 
     public Payment toEntity(Payment payment) {
+        if (payment == null && paymentDTO.getId() != null) {
+            throw DomainException.throwDomainException(domainName, "Matching payment entity from database not found");
+        }
+        if (payment != null && payment.getId() == null) {
+            throw DomainException.throwDomainException(domainName, "Matching payment entity from database does not have an ID");
+        }
+        if (payment != null && !payment.getId().equals(paymentDTO.getId())) {
+            throw DomainException.throwDomainException(domainName, "Id mismatch of payment entities");
+        }
+
         if (payment == null) {
             payment = new Payment();
         }
         if (paymentDTO.getId() != null) {
-            payment.setId(paymentDTO.getId());
             paymentMapper.partialUpdate(payment, paymentDTO);
         } else {
             payment.setCreateTime(paymentDTO.getCreateTime());

@@ -33,6 +33,14 @@ public class OrderDTO implements Serializable {
 
     private BigDecimal balance;
 
+    public OrderDTO() {}
+
+    public OrderDTO(Long id, ZonedDateTime orderDate, OrderStatus orderStatus) {
+        this.id = id;
+        this.orderDate = orderDate;
+        this.orderStatus = orderStatus;
+    }
+
     public Long getId() {
         return id;
     }

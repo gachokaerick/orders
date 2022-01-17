@@ -46,6 +46,38 @@ public class PaymentDTO implements Serializable {
 
     private OrderDTO order;
 
+    public PaymentDTO() {}
+
+    public PaymentDTO(
+        Long id,
+        ZonedDateTime createTime,
+        ZonedDateTime updateTime,
+        String paymentStatus,
+        String payerCountryCode,
+        String payerEmail,
+        String payerName,
+        String payerSurname,
+        String payerId,
+        String currency,
+        BigDecimal amount,
+        String paymentId,
+        OrderDTO order
+    ) {
+        this.id = id;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.paymentStatus = paymentStatus;
+        this.payerCountryCode = payerCountryCode;
+        this.payerEmail = payerEmail;
+        this.payerName = payerName;
+        this.payerSurname = payerSurname;
+        this.payerId = payerId;
+        this.currency = currency;
+        this.amount = amount;
+        this.paymentId = paymentId;
+        this.order = order;
+    }
+
     public Long getId() {
         return id;
     }
