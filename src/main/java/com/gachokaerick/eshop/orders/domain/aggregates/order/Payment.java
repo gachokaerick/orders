@@ -71,6 +71,36 @@ public class Payment implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
+    public Payment() {}
+
+    Payment(
+        Long id,
+        ZonedDateTime createTime,
+        ZonedDateTime updateTime,
+        String paymentStatus,
+        String payerCountryCode,
+        String payerEmail,
+        String payerName,
+        String payerSurname,
+        String payerId,
+        String currency,
+        BigDecimal amount,
+        String paymentId
+    ) {
+        this.id = id;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.paymentStatus = paymentStatus;
+        this.payerCountryCode = payerCountryCode;
+        this.payerEmail = payerEmail;
+        this.payerName = payerName;
+        this.payerSurname = payerSurname;
+        this.payerId = payerId;
+        this.currency = currency;
+        this.amount = amount;
+        this.paymentId = paymentId;
+    }
+
     public Long getId() {
         return this.id;
     }

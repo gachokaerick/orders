@@ -35,6 +35,28 @@ public class OrderItemDTO implements Serializable {
 
     private OrderDTO order;
 
+    public OrderItemDTO() {}
+
+    public OrderItemDTO(
+        Long id,
+        String productName,
+        String pictureUrl,
+        BigDecimal unitPrice,
+        BigDecimal discount,
+        Integer units,
+        Long productId,
+        OrderDTO order
+    ) {
+        this.id = id;
+        this.productName = productName;
+        this.pictureUrl = pictureUrl;
+        this.unitPrice = unitPrice;
+        this.discount = discount;
+        this.units = units;
+        this.productId = productId;
+        this.order = order;
+    }
+
     public Long getId() {
         return id;
     }

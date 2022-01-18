@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.gachokaerick.eshop.orders.domain.enumeration.OrderStatus;
 import com.gachokaerick.eshop.orders.domain.exception.DomainException;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
+import com.gachokaerick.eshop.orders.service.dto.OrderItemDTO;
 import com.gachokaerick.eshop.orders.service.dto.PaymentDTO;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -25,7 +26,20 @@ class PaymentDomainTest {
     final String currency = "USD";
     final BigDecimal amount = BigDecimal.valueOf(20);
     final String paymentId = "67893";
-    final OrderDTO order = new OrderDTO(1L, ZonedDateTime.now(), OrderStatus.DRAFT);
+    final OrderDTO order1 = new OrderDTO(1L, ZonedDateTime.now(), OrderStatus.DRAFT);
+
+    final ZonedDateTime createTime2 = ZonedDateTime.now();
+    final ZonedDateTime updateTime2 = ZonedDateTime.now();
+    final String paymentStatus2 = "Draft";
+    final String payerCountryCode2 = "USA";
+    final String payerEmail2 = "maryjane@gmail.com";
+    final String payerName2 = "Mary";
+    final String payerSurname2 = "Jane";
+    final String payerId2 = "maryjane";
+    final String currency2 = "KES";
+    final BigDecimal amount2 = BigDecimal.valueOf(200);
+    final String paymentId2 = "456789";
+    final OrderDTO order2 = new OrderDTO(2L, ZonedDateTime.now(), OrderStatus.CANCELLED);
 
     PaymentDTO getDTO() {
         return new PaymentDTO(
@@ -41,7 +55,24 @@ class PaymentDomainTest {
             currency,
             amount,
             paymentId,
-            order
+            order1
+        );
+    }
+
+    Payment getEntity() {
+        return new Payment(
+            null,
+            createTime2,
+            updateTime2,
+            paymentStatus2,
+            payerCountryCode2,
+            payerEmail2,
+            payerName2,
+            payerSurname2,
+            payerId2,
+            currency2,
+            amount2,
+            paymentId2
         );
     }
 
@@ -223,7 +254,7 @@ class PaymentDomainTest {
     void toEntityPartialUpdate() {
         PaymentDTO paymentDTO = getDTO();
         paymentDTO.setId(1L);
-        Payment p = new Payment();
+        Payment p = getEntity();
         p.setId(1L);
         PaymentDomain paymentDomain = new PaymentDomain.PaymentBuilder().withDTO(paymentDTO).build();
         Payment payment = paymentDomain.toEntity(p);
@@ -244,5 +275,34 @@ class PaymentDomainTest {
     }
 
     @Test
-    void setOrder() {}
+    void setOrder() {
+        PaymentDomain paymentDomain = new PaymentDomain.PaymentBuilder().withDTO(getDTO()).build();
+        Payment payment = paymentDomain.toEntity(null);
+
+        assertAll(
+            () -> {
+                Exception exception = assertThrows(DomainException.class, () -> paymentDomain.setOrder(payment, null));
+                assertTrue(exception.getMessage().contains("Order for a payment must exist"));
+            },
+            () -> {
+                Order order = new OrderDomain.OrderBuilder().withOrderDTO(order1).build().toEntity(null);
+                order.setId(null);
+                Exception exception = assertThrows(DomainException.class, () -> paymentDomain.setOrder(payment, order));
+                assertTrue(exception.getMessage().contains("Order for a payment must exist"));
+            },
+            () -> {
+                Order order = new OrderDomain.OrderBuilder().withOrderDTO(order1).build().toEntity(null);
+                Exception exception = assertThrows(DomainException.class, () -> paymentDomain.setOrder(payment, order));
+                assertTrue(exception.getMessage().contains("Cannot make a payment for an empty order"));
+            },
+            () -> {
+                Order order = new OrderDomain.OrderBuilder().withOrderDTO(order2).build().toEntity(null);
+                OrderItemDTO orderItemDTO = new OrderItemDTO(1L, "test", "http", BigDecimal.ONE, BigDecimal.ZERO, 2, 443L, order2);
+                OrderItemDomain orderItemDomain = new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build();
+                order.addOrderItems(orderItemDomain.toEntity(null));
+                assertDoesNotThrow(() -> paymentDomain.setOrder(payment, order));
+                assertEquals(payment.getOrder().getId(), order.getId());
+            }
+        );
+    }
 }
