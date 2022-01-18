@@ -55,18 +55,6 @@ public class PaymentDomain {
         return payment;
     }
 
-    public Payment setOrder(Payment payment, Order order) {
-        if (order == null || order.getId() == null) {
-            throw DomainException.throwDomainException(domainName, "Order for a payment must exist");
-        }
-        if (order.getOrderItems().isEmpty()) {
-            throw DomainException.throwDomainException(domainName, "Cannot make a payment for an empty order");
-        }
-        payment.setOrder(order);
-
-        return payment;
-    }
-
     public static class PaymentBuilder {
 
         private PaymentDTO paymentDTO;

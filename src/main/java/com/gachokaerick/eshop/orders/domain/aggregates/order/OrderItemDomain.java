@@ -23,11 +23,20 @@ public class OrderItemDomain {
     }
 
     public OrderItem toEntity(OrderItem orderItem) {
+        if (orderItem == null && orderItemDTO.getId() != null) {
+            throw DomainException.throwDomainException(domainName, "Matching orderItem entity from database not found");
+        }
+        if (orderItem != null && orderItem.getId() == null) {
+            throw DomainException.throwDomainException(domainName, "Matching orderItem entity from database does not have an ID");
+        }
+        if (orderItem != null && !orderItem.getId().equals(orderItemDTO.getId())) {
+            throw DomainException.throwDomainException(domainName, "Id mismatch of orderItem entities");
+        }
+
         if (orderItem == null) {
             orderItem = new OrderItem();
         }
         if (orderItemDTO.getId() != null) {
-            orderItem.setId(orderItemDTO.getId());
             orderItemMapper.partialUpdate(orderItem, orderItemDTO);
         } else {
             orderItem.setProductName(orderItemDTO.getProductName());
