@@ -8,6 +8,7 @@ import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
 import com.gachokaerick.eshop.orders.service.dto.OrderItemDTO;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import liquibase.pro.packaged.O;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -136,6 +137,110 @@ class OrderItemDomainTest {
                 );
                 assertTrue(exception.getMessage().contains("order entity for an order item must have an ID"));
             }
+        );
+    }
+
+    @Test
+    void testOrderIsRequiredIfOrderIsSet() {
+        assertAll(
+            () -> {
+                OrderItemDTO orderItemDTO = getDTO();
+                orderItemDTO.setId(1L);
+                orderItemDTO.getOrder().setId(null);
+                Exception exception = assertThrows(
+                    DomainException.class,
+                    () -> new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build()
+                );
+                assertTrue(exception.getMessage().contains("order entity for an order item must have an ID"));
+            },
+            () -> {
+                OrderItemDTO orderItemDTO = getDTO();
+                orderItemDTO.getOrder().setId(null);
+                Exception exception = assertThrows(
+                    DomainException.class,
+                    () -> new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build()
+                );
+                assertTrue(exception.getMessage().contains("order entity for an order item must have an ID"));
+            },
+            () -> {
+                OrderItemDTO orderItemDTO = getDTO();
+                orderItemDTO.setId(1L);
+                orderItemDTO.setOrder(null);
+                assertDoesNotThrow(() -> new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build());
+            }
+        );
+    }
+
+    @Test
+    void toEntityWithNullAndIdIsNull() {
+        OrderItemDTO orderItemDTO = getDTO();
+        OrderItemDomain orderItemDomain = new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build();
+        OrderItem orderItem = orderItemDomain.toEntity(null);
+        assertAll(
+            () -> assertNull(orderItem.getId()),
+            () -> assertEquals(orderItem.getProductName(), orderItemDTO.getProductName()),
+            () -> assertEquals(orderItem.getPictureUrl(), orderItemDTO.getPictureUrl()),
+            () -> assertEquals(orderItem.getUnitPrice(), orderItemDTO.getUnitPrice()),
+            () -> assertEquals(orderItem.getDiscount(), orderItemDTO.getDiscount()),
+            () -> assertEquals(orderItem.getUnits(), orderItemDTO.getUnits()),
+            () -> assertEquals(orderItem.getProductId(), orderItemDTO.getProductId()),
+            () -> assertEquals(orderItem.getOrder().getId(), orderItemDTO.getOrder().getId())
+        );
+    }
+
+    @Test
+    void toEntityOrderItemRequiredIfDTOIdNotNull() {
+        assertAll(
+            () -> {
+                OrderItemDTO orderItemDTO = getDTO();
+                orderItemDTO.setId(1L);
+                OrderItemDomain orderItemDomain = new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build();
+                Exception exception = assertThrows(DomainException.class, () -> orderItemDomain.toEntity(null));
+                assertTrue(exception.getMessage().contains("Matching orderItem entity from database not found"));
+            },
+            () -> {
+                OrderItemDTO orderItemDTO = getDTO();
+                OrderItemDomain orderItemDomain = new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build();
+                OrderItem orderItem = new OrderItem();
+                Exception exception = assertThrows(DomainException.class, () -> orderItemDomain.toEntity(orderItem));
+                assertTrue(exception.getMessage().contains("Matching orderItem entity from database does not have an ID"));
+            },
+            () -> {
+                OrderItemDTO orderItemDTO = getDTO();
+                orderItemDTO.setId(1L);
+                OrderItemDomain orderItemDomain = new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build();
+                OrderItem orderItem = new OrderItem();
+                Exception exception = assertThrows(DomainException.class, () -> orderItemDomain.toEntity(orderItem));
+                assertTrue(exception.getMessage().contains("Matching orderItem entity from database does not have an ID"));
+            },
+            () -> {
+                OrderItemDTO orderItemDTO = getDTO();
+                orderItemDTO.setId(1L);
+                OrderItemDomain orderItemDomain = new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build();
+                OrderItem orderItem = new OrderItem();
+                orderItem.setId(2L);
+                Exception exception = assertThrows(DomainException.class, () -> orderItemDomain.toEntity(orderItem));
+                assertTrue(exception.getMessage().contains("Id mismatch of orderItem entities"));
+            }
+        );
+    }
+
+    @Test
+    void toEntityPartialUpdate() {
+        OrderItemDTO orderItemDTO = getDTO();
+        orderItemDTO.setId(1L);
+        OrderItem oi = new OrderItem();
+        oi.setId(1L);
+        OrderItemDomain orderItemDomain = new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build();
+        OrderItem orderItem = orderItemDomain.toEntity(oi);
+        assertAll(
+            () -> assertEquals(orderItem.getId(), orderItemDTO.getId()),
+            () -> assertEquals(orderItem.getProductName(), orderItemDTO.getProductName()),
+            () -> assertEquals(orderItem.getPictureUrl(), orderItemDTO.getPictureUrl()),
+            () -> assertEquals(orderItem.getUnitPrice(), orderItemDTO.getUnitPrice()),
+            () -> assertEquals(orderItem.getDiscount(), orderItemDTO.getDiscount()),
+            () -> assertEquals(orderItem.getUnits(), orderItemDTO.getUnits()),
+            () -> assertEquals(orderItem.getProductId(), orderItemDTO.getProductId())
         );
     }
 }

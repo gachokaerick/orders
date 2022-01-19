@@ -241,6 +241,14 @@ class PaymentDomainTest {
                 PaymentDTO paymentDTO = getDTO();
                 paymentDTO.setId(1L);
                 Payment payment = new Payment();
+                PaymentDomain paymentDomain = new PaymentDomain.PaymentBuilder().withDTO(paymentDTO).build();
+                Exception exception = assertThrows(DomainException.class, () -> paymentDomain.toEntity(payment));
+                assertTrue(exception.getMessage().contains("Matching payment entity from database does not have an ID"));
+            },
+            () -> {
+                PaymentDTO paymentDTO = getDTO();
+                paymentDTO.setId(1L);
+                Payment payment = new Payment();
                 payment.setId(2L);
                 PaymentDomain paymentDomain = new PaymentDomain.PaymentBuilder().withDTO(paymentDTO).build();
                 Exception exception = assertThrows(DomainException.class, () -> paymentDomain.toEntity(payment));
