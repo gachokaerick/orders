@@ -5,7 +5,8 @@ import com.gachokaerick.eshop.orders.domain.enumeration.Gender;
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * A DTO for the {@link Buyer} entity.
@@ -32,6 +33,17 @@ public class BuyerDTO implements Serializable {
     private String phone;
 
     private UserDTO user;
+
+    public BuyerDTO() {}
+
+    public BuyerDTO(Long id, String firstName, String lastName, Gender gender, String email, String phone) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.email = email;
+        this.phone = phone;
+    }
 
     public Long getId() {
         return id;

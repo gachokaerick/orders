@@ -41,6 +41,15 @@ public class OrderDTO implements Serializable {
         this.orderStatus = orderStatus;
     }
 
+    public OrderDTO(Long id, ZonedDateTime orderDate, OrderStatus orderStatus, String description, AddressDTO address, BuyerDTO buyer) {
+        this.id = id;
+        this.orderDate = orderDate;
+        this.orderStatus = orderStatus;
+        this.description = description;
+        this.address = address;
+        this.buyer = buyer;
+    }
+
     public Long getId() {
         return id;
     }

@@ -8,14 +8,12 @@ import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
 import com.gachokaerick.eshop.orders.service.dto.OrderItemDTO;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import liquibase.pro.packaged.O;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 @Tag("domain")
 class OrderItemDomainTest {
 
-    final Long id = 1L;
     final String productName = "pants";
     final String pictureUrl = "http://pants";
     final BigDecimal unitPrice = BigDecimal.valueOf(10);
@@ -23,15 +21,6 @@ class OrderItemDomainTest {
     final Integer units = 1;
     final Long productId = 323L;
     final OrderDTO order1 = new OrderDTO(1L, ZonedDateTime.now(), OrderStatus.DRAFT);
-
-    final Long id2 = 2L;
-    final String productName2 = "socks";
-    final String pictureUrl2 = "https://socks";
-    final BigDecimal unitPrice2 = BigDecimal.valueOf(1);
-    final BigDecimal discount2 = BigDecimal.ZERO;
-    final Integer units2 = 2;
-    final Long productId2 = 56789L;
-    final OrderDTO order2 = new OrderDTO(2L, ZonedDateTime.now(), OrderStatus.CANCELLED);
 
     OrderItemDTO getDTO() {
         return new OrderItemDTO(null, productName, pictureUrl, unitPrice, discount, units, productId, order1);

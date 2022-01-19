@@ -1,7 +1,6 @@
 package com.gachokaerick.eshop.orders.domain.aggregates.order;
 
 import com.gachokaerick.eshop.orders.domain.Address;
-import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
 import com.gachokaerick.eshop.orders.domain.enumeration.OrderStatus;
 import com.gachokaerick.eshop.orders.domain.exception.DomainException;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
@@ -13,7 +12,6 @@ public class OrderDomain {
     private static final String domainName = "Order";
 
     private final OrderDTO orderDTO;
-    private final Order order = new Order();
     private final OrderMapperImpl orderMapper = new OrderMapperImpl();
 
     private OrderDomain(OrderBuilder builder) {
@@ -36,7 +34,6 @@ public class OrderDomain {
         }
 
         if (orderDTO.getId() != null) {
-            order.setId(orderDTO.getId());
             orderMapper.partialUpdate(order, orderDTO);
         } else {
             order.setOrderDate(orderDTO.getOrderDate());
@@ -108,7 +105,7 @@ public class OrderDomain {
 
         private boolean isAcceptable() {
             if (this.orderDTO == null) {
-                throw DomainException.throwDomainException(domainName, "catalogItemDTO is required");
+                throw DomainException.throwDomainException(domainName, "order is required");
             }
 
             if (orderDTO.getId() == null && orderDTO.getOrderDate() == null) {

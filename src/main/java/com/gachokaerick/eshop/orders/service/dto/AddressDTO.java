@@ -31,6 +31,18 @@ public class AddressDTO implements Serializable {
 
     private BuyerDTO buyer;
 
+    public AddressDTO() {}
+
+    public AddressDTO(Long id, String street, String city, String town, String country, String zipcode, BuyerDTO buyer) {
+        this.id = id;
+        this.street = street;
+        this.city = city;
+        this.town = town;
+        this.country = country;
+        this.zipcode = zipcode;
+        this.buyer = buyer;
+    }
+
     public Long getId() {
         return id;
     }
