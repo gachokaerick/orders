@@ -21,6 +21,16 @@ public class OrderDomain {
     }
 
     public Order toEntity(Order order) {
+        if (order == null && orderDTO.getId() != null) {
+            throw DomainException.throwDomainException(domainName, "Matching order entity from database not found");
+        }
+        if (order != null && order.getId() == null) {
+            throw DomainException.throwDomainException(domainName, "Matching order entity from database does not have an ID");
+        }
+        if (order != null && !order.getId().equals(orderDTO.getId())) {
+            throw DomainException.throwDomainException(domainName, "Id mismatch of order entities");
+        }
+
         if (order == null) {
             order = new Order();
         }
