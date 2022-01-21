@@ -9,16 +9,10 @@ public class PaymentDomain {
     private static final String domainName = "Payment";
 
     private final PaymentDTO paymentDTO;
-    private final OrderDomain orderDomain;
     private final PaymentMapperImpl paymentMapper = new PaymentMapperImpl();
 
     private PaymentDomain(PaymentBuilder builder) {
         this.paymentDTO = builder.paymentDTO;
-        if (paymentDTO.getOrder() != null) {
-            orderDomain = new OrderDomain.OrderBuilder().withOrderDTO(paymentDTO.getOrder()).build();
-        } else {
-            orderDomain = null;
-        }
     }
 
     public Payment toEntity(Payment payment) {
@@ -49,7 +43,6 @@ public class PaymentDomain {
             payment.setCurrency(paymentDTO.getCurrency());
             payment.setAmount(paymentDTO.getAmount());
             payment.setPaymentId(paymentDTO.getPaymentId());
-            payment.setOrder(orderDomain.toEntity(null));
         }
 
         return payment;

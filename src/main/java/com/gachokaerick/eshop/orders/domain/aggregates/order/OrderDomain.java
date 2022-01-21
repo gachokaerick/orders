@@ -47,6 +47,13 @@ public class OrderDomain {
     }
 
     public BigDecimal calculateItemsTotal(Order order) {
+        if (order == null) {
+            throw DomainException.throwDomainException(domainName, "Cannot calculate items total for null order");
+        }
+        if (order.getOrderItems() == null) {
+            throw DomainException.throwDomainException(domainName, "Cannot calculate items total for null order items");
+        }
+
         BigDecimal total = BigDecimal.ZERO;
         for (OrderItem orderItem : order.getOrderItems()) {
             BigDecimal itemTotal =
@@ -57,6 +64,12 @@ public class OrderDomain {
     }
 
     public BigDecimal calculateTotalPaid(Order order) {
+        if (order == null) {
+            throw DomainException.throwDomainException(domainName, "Cannot calculate total paid for null order");
+        }
+        if (order.getPayments() == null) {
+            throw DomainException.throwDomainException(domainName, "Cannot calculate items total for null order payments");
+        }
         BigDecimal total = BigDecimal.ZERO;
         for (Payment payment : order.getPayments()) {
             total = total.add(payment.getAmount());
@@ -68,12 +81,11 @@ public class OrderDomain {
         return calculateItemsTotal(order).subtract(calculateTotalPaid(order));
     }
 
-    public Order setAddress(Order order, Address address) {
+    public void setAddress(Order order, Address address) {
         if (address == null || address.getId() == null) {
             throw DomainException.throwDomainException(domainName, "Address for an order must exist");
         }
         order.setAddress(address);
-        return order;
     }
 
     public void addOrderItem(Order order, OrderItem orderItem) {

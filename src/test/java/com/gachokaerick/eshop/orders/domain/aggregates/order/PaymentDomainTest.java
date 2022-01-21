@@ -215,8 +215,7 @@ class PaymentDomainTest {
             () -> assertEquals(payment.getPayerId(), paymentDTO.getPayerId()),
             () -> assertEquals(payment.getCurrency(), paymentDTO.getCurrency()),
             () -> assertEquals(payment.getAmount(), paymentDTO.getAmount()),
-            () -> assertEquals(payment.getPaymentId(), paymentDTO.getPaymentId()),
-            () -> assertEquals(payment.getOrder().getId(), paymentDTO.getOrder().getId())
+            () -> assertEquals(payment.getPaymentId(), paymentDTO.getPaymentId())
         );
     }
 

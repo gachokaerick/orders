@@ -59,7 +59,7 @@ public class OrderService {
         } else {
             order = orderDomain.toEntity(null);
             Address address = addressRepository.getById(orderDTO.getAddress().getId());
-            order = orderDomain.setAddress(order, address);
+            orderDomain.setAddress(order, address);
         }
 
         order = orderRepository.save(order);

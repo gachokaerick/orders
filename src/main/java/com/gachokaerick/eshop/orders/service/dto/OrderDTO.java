@@ -58,6 +58,11 @@ public class OrderDTO implements Serializable {
         this.id = id;
     }
 
+    public OrderDTO withId(Long id) {
+        this.setId(id);
+        return this;
+    }
+
     public ZonedDateTime getOrderDate() {
         return orderDate;
     }
