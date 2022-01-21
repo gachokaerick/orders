@@ -172,8 +172,7 @@ class OrderItemDomainTest {
             () -> assertEquals(orderItem.getUnitPrice(), orderItemDTO.getUnitPrice()),
             () -> assertEquals(orderItem.getDiscount(), orderItemDTO.getDiscount()),
             () -> assertEquals(orderItem.getUnits(), orderItemDTO.getUnits()),
-            () -> assertEquals(orderItem.getProductId(), orderItemDTO.getProductId()),
-            () -> assertEquals(orderItem.getOrder().getId(), orderItemDTO.getOrder().getId())
+            () -> assertEquals(orderItem.getProductId(), orderItemDTO.getProductId())
         );
     }
 

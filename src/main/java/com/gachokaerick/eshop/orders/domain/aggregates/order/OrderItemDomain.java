@@ -10,16 +10,10 @@ public class OrderItemDomain {
     private static final String domainName = "OrderItem";
 
     private final OrderItemDTO orderItemDTO;
-    private final OrderDomain orderDomain;
     private final OrderItemMapperImpl orderItemMapper = new OrderItemMapperImpl();
 
     private OrderItemDomain(OrderItemBuilder builder) {
         this.orderItemDTO = builder.orderItemDTO;
-        if (orderItemDTO.getOrder() != null) {
-            this.orderDomain = new OrderDomain.OrderBuilder().withOrderDTO(orderItemDTO.getOrder()).build();
-        } else {
-            orderDomain = null;
-        }
     }
 
     public OrderItem toEntity(OrderItem orderItem) {
@@ -45,7 +39,6 @@ public class OrderItemDomain {
             orderItem.setDiscount(orderItemDTO.getDiscount());
             orderItem.setUnits(orderItemDTO.getUnits());
             orderItem.setProductId(orderItemDTO.getProductId());
-            orderItem.setOrder(orderDomain.toEntity(null));
         }
 
         return orderItem;
