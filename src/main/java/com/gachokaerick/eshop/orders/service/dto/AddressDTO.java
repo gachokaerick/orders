@@ -135,7 +135,7 @@ public class AddressDTO implements Serializable {
     }
 
     public Address toEntity() {
-        Buyer buyer = new BuyerDomain.BuyerBuilder().withDTO(getBuyer()).build().getBuyer();
+        Buyer buyer = new BuyerDomain.BuyerBuilder().withDTO(getBuyer()).build().toEntity();
         Address address = new Address();
         address.setId(getId());
         address.setStreet(getStreet());

@@ -45,6 +45,16 @@ public class BuyerDTO implements Serializable {
         this.phone = phone;
     }
 
+    public BuyerDTO(Long id, String firstName, String lastName, Gender gender, String email, String phone, UserDTO user) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.email = email;
+        this.phone = phone;
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
     }

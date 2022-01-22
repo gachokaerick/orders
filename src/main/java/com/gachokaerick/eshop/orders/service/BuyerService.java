@@ -4,6 +4,7 @@ import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerDomain;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerMapper;
 import com.gachokaerick.eshop.orders.repository.BuyerRepository;
+import com.gachokaerick.eshop.orders.repository.UserRepository;
 import com.gachokaerick.eshop.orders.service.dto.BuyerDTO;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -23,11 +24,12 @@ public class BuyerService {
     private final Logger log = LoggerFactory.getLogger(BuyerService.class);
 
     private final BuyerRepository buyerRepository;
-
+    private final UserRepository userRepository;
     private final BuyerMapper buyerMapper;
 
-    public BuyerService(BuyerRepository buyerRepository, BuyerMapper buyerMapper) {
+    public BuyerService(BuyerRepository buyerRepository, UserRepository userRepository, BuyerMapper buyerMapper) {
         this.buyerRepository = buyerRepository;
+        this.userRepository = userRepository;
         this.buyerMapper = buyerMapper;
     }
 
@@ -39,7 +41,14 @@ public class BuyerService {
      */
     public BuyerDTO save(BuyerDTO buyerDTO) {
         log.debug("Request to save Buyer : {}", buyerDTO);
-        Buyer buyer = new BuyerDomain.BuyerBuilder().withDTO(buyerDTO).build().getBuyer();
+        BuyerDomain buyerDomain = new BuyerDomain.BuyerBuilder().withDTO(buyerDTO).build();
+        Buyer buyer;
+        if (buyerDTO.getId() != null) {
+            buyer = buyerDomain.toEntity(buyerRepository.getById(buyerDTO.getId()));
+        } else {
+            buyer = buyerDomain.toEntity(null);
+            buyerDomain.setUser(buyer, userRepository.getById(buyerDTO.getUser().getId()));
+        }
         buyer = buyerRepository.save(buyer);
         return buyerMapper.toDto(buyer);
     }

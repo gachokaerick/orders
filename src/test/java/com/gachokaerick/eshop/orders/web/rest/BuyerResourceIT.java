@@ -302,7 +302,7 @@
 //
 //    @Test
 //    @Transactional
-//    void getBuyer() throws Exception {
+//    void toEntity() throws Exception {
 //        // Initialize the database
 //        buyerRepository.saveAndFlush(buyer);
 //

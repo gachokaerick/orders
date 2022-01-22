@@ -21,6 +21,11 @@ public class UserDTO {
         this.login = user.getLogin();
     }
 
+    public UserDTO(String id, String login) {
+        this.id = id;
+        this.login = login;
+    }
+
     public String getId() {
         return id;
     }
