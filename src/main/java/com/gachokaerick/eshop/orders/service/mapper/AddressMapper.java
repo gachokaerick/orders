@@ -33,7 +33,6 @@ public interface AddressMapper extends EntityMapper<AddressDTO, Address> {
             throw DomainException.throwDomainException("AddressVO", "buyer entity for an address item must have an ID");
         }
 
-        Buyer buyer = new BuyerDomain.BuyerBuilder().withDTO(dto.getBuyer()).build().toEntity();
         Address address = new Address();
 
         address.setId(dto.getId());
@@ -42,7 +41,6 @@ public interface AddressMapper extends EntityMapper<AddressDTO, Address> {
         address.setTown(dto.getTown());
         address.setCountry(dto.getCountry());
         address.setZipcode(dto.getZipcode());
-        address.setBuyer(buyer);
         return address;
     }
 }

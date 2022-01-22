@@ -49,7 +49,7 @@ public class BuyerService {
             buyer = buyerDomain.toEntity(null);
             buyerDomain.setUser(buyer, userRepository.getById(buyerDTO.getUser().getId()));
         }
-        buyer = buyerRepository.save(buyer);
+        buyerRepository.save(buyer);
         return buyerMapper.toDto(buyer);
     }
 
