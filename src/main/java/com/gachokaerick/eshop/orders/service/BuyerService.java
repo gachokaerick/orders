@@ -1,5 +1,6 @@
 package com.gachokaerick.eshop.orders.service;
 
+import com.gachokaerick.eshop.orders.domain.User;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerDomain;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerMapper;
@@ -47,9 +48,16 @@ public class BuyerService {
             buyer = buyerDomain.toEntity(buyerRepository.getById(buyerDTO.getId()));
         } else {
             buyer = buyerDomain.toEntity(null);
-            buyerDomain.setUser(buyer, userRepository.getById(buyerDTO.getUser().getId()));
+            Optional<User> userOptional = userRepository.findById(buyerDTO.getUser().getId());
+            if (userOptional.isPresent()) {
+                buyerDomain.setUser(buyer, userOptional.get());
+            } else {
+                User user = new User(buyerDTO.getUser().getId(), buyerDTO.getUser().getLogin());
+                user = userRepository.save(user);
+                buyerDomain.setUser(buyer, user);
+            }
         }
-        buyerRepository.save(buyer);
+        buyer = buyerRepository.save(buyer);
         return buyerMapper.toDto(buyer);
     }
 

@@ -2,8 +2,8 @@ package com.gachokaerick.eshop.orders.service;
 
 import com.gachokaerick.eshop.orders.domain.Address;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
-import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerDomain;
 import com.gachokaerick.eshop.orders.repository.AddressRepository;
+import com.gachokaerick.eshop.orders.repository.BuyerRepository;
 import com.gachokaerick.eshop.orders.service.dto.AddressDTO;
 import com.gachokaerick.eshop.orders.service.mapper.AddressMapper;
 import java.util.Optional;
@@ -24,11 +24,12 @@ public class AddressService {
     private final Logger log = LoggerFactory.getLogger(AddressService.class);
 
     private final AddressRepository addressRepository;
-
+    private final BuyerRepository buyerRepository;
     private final AddressMapper addressMapper;
 
-    public AddressService(AddressRepository addressRepository, AddressMapper addressMapper) {
+    public AddressService(AddressRepository addressRepository, BuyerRepository buyerRepository, AddressMapper addressMapper) {
         this.addressRepository = addressRepository;
+        this.buyerRepository = buyerRepository;
         this.addressMapper = addressMapper;
     }
 
@@ -40,7 +41,15 @@ public class AddressService {
      */
     public AddressDTO save(AddressDTO addressDTO) {
         log.debug("Request to save Address : {}", addressDTO);
-        Address address = addressMapper.toEntity(addressDTO);
+        Address address;
+        if (addressDTO.getId() != null) {
+            address = addressRepository.findById(addressDTO.getId()).orElseThrow();
+            addressMapper.partialUpdate(address, addressDTO);
+        } else {
+            Buyer buyer = buyerRepository.findById(addressDTO.getBuyer().getId()).orElseThrow();
+            address = addressMapper.toEntity(addressDTO);
+            address.setBuyer(buyer);
+        }
         address = addressRepository.save(address);
         return addressMapper.toDto(address);
     }

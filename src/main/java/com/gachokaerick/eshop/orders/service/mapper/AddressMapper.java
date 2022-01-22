@@ -43,4 +43,26 @@ public interface AddressMapper extends EntityMapper<AddressDTO, Address> {
         address.setZipcode(dto.getZipcode());
         return address;
     }
+
+    default void partialUpdate(Address entity, AddressDTO dto) {
+        if (dto == null) {
+            return;
+        }
+
+        if (dto.getStreet() != null) {
+            entity.setStreet(dto.getStreet());
+        }
+        if (dto.getCity() != null) {
+            entity.setCity(dto.getCity());
+        }
+        if (dto.getTown() != null) {
+            entity.setTown(dto.getTown());
+        }
+        if (dto.getCountry() != null) {
+            entity.setCountry(dto.getCountry());
+        }
+        if (dto.getZipcode() != null) {
+            entity.setZipcode(dto.getZipcode());
+        }
+    }
 }
