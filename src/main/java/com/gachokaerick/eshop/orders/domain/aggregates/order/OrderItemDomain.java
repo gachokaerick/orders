@@ -44,6 +44,10 @@ public class OrderItemDomain {
         return orderItem;
     }
 
+    public void setOrder(OrderItem orderItem, Order order) {
+        orderItem.setOrder(order);
+    }
+
     public static class OrderItemBuilder {
 
         private OrderItemDTO orderItemDTO;

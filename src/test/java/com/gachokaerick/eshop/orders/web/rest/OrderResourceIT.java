@@ -11,7 +11,6 @@ import com.gachokaerick.eshop.orders.IntegrationTest;
 import com.gachokaerick.eshop.orders.domain.Address;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerMapper;
-import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerMapperImpl;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.Order;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderDomain;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderMapper;
@@ -19,7 +18,6 @@ import com.gachokaerick.eshop.orders.domain.enumeration.OrderStatus;
 import com.gachokaerick.eshop.orders.repository.OrderRepository;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
 import com.gachokaerick.eshop.orders.service.mapper.AddressMapper;
-import com.gachokaerick.eshop.orders.service.mapper.AddressMapperImpl;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -30,7 +28,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
@@ -98,7 +95,7 @@ class OrderResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Order createEntity(EntityManager em) {
+    public static Order createEntity(EntityManager em, AddressMapper am, BuyerMapper bm) {
         OrderDTO orderDTO = getOrderDTO();
 
         // Add required entity
@@ -110,7 +107,7 @@ class OrderResourceIT {
         } else {
             address = TestUtil.findAll(em, Address.class).get(0);
         }
-        orderDTO.setAddress(addressMapper.toDto(address));
+        orderDTO.setAddress(am.toDto(address));
 
         // Add required entity
         Buyer buyer;
@@ -121,7 +118,7 @@ class OrderResourceIT {
         } else {
             buyer = TestUtil.findAll(em, Buyer.class).get(0);
         }
-        orderDTO.setBuyer(buyerMapper.toDto(buyer));
+        orderDTO.setBuyer(bm.toDto(buyer));
 
         OrderDomain orderDomain = new OrderDomain.OrderBuilder().withOrderDTO(orderDTO).build();
         Order order = orderDomain.toEntity(null);
@@ -173,7 +170,7 @@ class OrderResourceIT {
     public void initTest() {
         addressMapper = addressMap;
         buyerMapper = buyerMap;
-        order = createEntity(em);
+        order = createEntity(em, addressMapper, buyerMapper);
     }
 
     @Test

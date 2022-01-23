@@ -46,7 +46,7 @@ public class OrderItemService {
             orderItem = orderItemDomain.toEntity(orderItemRepository.getById(orderItemDTO.getId()));
             orderItem = orderItemRepository.save(orderItem);
         } else {
-            orderItem = orderService.addOrderItem(orderItemDomain);
+            orderItem = orderService.addOrderItem(orderItemDTO);
         }
         return orderItemMapper.toDto(orderItem);
     }

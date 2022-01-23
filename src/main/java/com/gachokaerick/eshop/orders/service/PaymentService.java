@@ -46,7 +46,7 @@ public class PaymentService {
             payment = paymentDomain.toEntity(paymentRepository.getById(paymentDTO.getId()));
             payment = paymentRepository.save(payment);
         } else {
-            payment = orderService.addPayment(paymentDomain);
+            payment = orderService.addPayment(paymentDTO);
         }
 
         return paymentMapper.toDto(payment);

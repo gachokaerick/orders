@@ -7,6 +7,8 @@ import com.gachokaerick.eshop.orders.repository.OrderItemRepository;
 import com.gachokaerick.eshop.orders.repository.OrderRepository;
 import com.gachokaerick.eshop.orders.repository.PaymentRepository;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
+import com.gachokaerick.eshop.orders.service.dto.OrderItemDTO;
+import com.gachokaerick.eshop.orders.service.dto.PaymentDTO;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,9 +68,10 @@ public class OrderService {
         return orderMapper.toDto(order);
     }
 
-    public OrderItem addOrderItem(OrderItemDomain orderItemDomain) {
+    public OrderItem addOrderItem(OrderItemDTO orderItemDTO) {
+        OrderItemDomain orderItemDomain = new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build();
         OrderItem orderItem = orderItemDomain.toEntity(null);
-        Order order = orderRepository.getById(orderItem.getOrder().getId());
+        Order order = orderRepository.getById(orderItemDTO.getOrder().getId());
         OrderDomain orderDomain = new OrderDomain.OrderBuilder().withOrderDTO(orderMapper.toDto(order)).build();
         orderDomain.addOrderItem(order, orderItem);
         orderItem = orderItemRepository.save(orderItem);
@@ -76,9 +79,10 @@ public class OrderService {
         return orderItem;
     }
 
-    public Payment addPayment(PaymentDomain paymentDomain) {
+    public Payment addPayment(PaymentDTO paymentDTO) {
+        PaymentDomain paymentDomain = new PaymentDomain.PaymentBuilder().withDTO(paymentDTO).build();
         Payment payment = paymentDomain.toEntity(null);
-        Order order = orderRepository.getById(payment.getOrder().getId());
+        Order order = orderRepository.getById(paymentDTO.getOrder().getId());
         OrderDomain orderDomain = new OrderDomain.OrderBuilder().withOrderDTO(orderMapper.toDto(order)).build();
         orderDomain.addPayment(order, payment);
         payment = paymentRepository.save(payment);

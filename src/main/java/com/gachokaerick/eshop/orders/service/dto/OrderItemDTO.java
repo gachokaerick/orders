@@ -121,6 +121,36 @@ public class OrderItemDTO implements Serializable {
         this.order = order;
     }
 
+    public OrderItemDTO productName(String productName) {
+        this.productName = productName;
+        return this;
+    }
+
+    public OrderItemDTO pictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+        return this;
+    }
+
+    public OrderItemDTO unitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+        return this;
+    }
+
+    public OrderItemDTO discount(BigDecimal discount) {
+        this.discount = discount;
+        return this;
+    }
+
+    public OrderItemDTO units(Integer units) {
+        this.units = units;
+        return this;
+    }
+
+    public OrderItemDTO productId(Long productId) {
+        this.productId = productId;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
