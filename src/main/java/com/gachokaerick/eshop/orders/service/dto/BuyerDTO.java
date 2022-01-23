@@ -111,6 +111,36 @@ public class BuyerDTO implements Serializable {
         this.user = user;
     }
 
+    public BuyerDTO id(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public BuyerDTO firstName(String firstName) {
+        this.firstName = firstName;
+        return this;
+    }
+
+    public BuyerDTO lastName(String lastName) {
+        this.lastName = lastName;
+        return this;
+    }
+
+    public BuyerDTO gender(Gender gender) {
+        this.gender = gender;
+        return this;
+    }
+
+    public BuyerDTO email(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public BuyerDTO phone(String phone) {
+        this.phone = phone;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
