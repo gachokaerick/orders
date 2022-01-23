@@ -124,14 +124,6 @@ class OrderItemResourceIT {
     public static OrderItem createEntity(EntityManager em, AddressMapper am, BuyerMapper bm) {
         OrderItemDTO orderItemDTO = getOrderItemDTO();
 
-        orderItemDTO
-            .productName(DEFAULT_PRODUCT_NAME)
-            .pictureUrl(DEFAULT_PICTURE_URL)
-            .unitPrice(DEFAULT_UNIT_PRICE)
-            .discount(DEFAULT_DISCOUNT)
-            .units(DEFAULT_UNITS)
-            .productId(DEFAULT_PRODUCT_ID);
-
         // Add required entity
         Order order;
         if (TestUtil.findAll(em, Order.class).isEmpty()) {
@@ -141,8 +133,6 @@ class OrderItemResourceIT {
         } else {
             order = TestUtil.findAll(em, Order.class).get(0);
         }
-
-        orderItemDTO.setOrder(orderMapper.toDto(order));
 
         OrderItemDomain orderItemDomain = new OrderItemDomain.OrderItemBuilder().withDTO(orderItemDTO).build();
         OrderItem orderItem = orderItemDomain.toEntity(null);
@@ -157,15 +147,7 @@ class OrderItemResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static OrderItem createUpdatedEntity(EntityManager em) {
-        OrderItemDTO orderItemDTO = getOrderItemDTO();
-
-        orderItemDTO
-            .productName(UPDATED_PRODUCT_NAME)
-            .pictureUrl(UPDATED_PICTURE_URL)
-            .unitPrice(UPDATED_UNIT_PRICE)
-            .discount(UPDATED_DISCOUNT)
-            .units(UPDATED_UNITS)
-            .productId(UPDATED_PRODUCT_ID);
+        OrderItemDTO orderItemDTO = getUpdatedOrderItemDTO();
 
         // Add required entity
         Order order;

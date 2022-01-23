@@ -182,6 +182,61 @@ public class PaymentDTO implements Serializable {
         this.order = order;
     }
 
+    public PaymentDTO createTime(ZonedDateTime createTime) {
+        this.createTime = createTime;
+        return this;
+    }
+
+    public PaymentDTO updateTime(ZonedDateTime updateTime) {
+        this.updateTime = updateTime;
+        return this;
+    }
+
+    public PaymentDTO paymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+        return this;
+    }
+
+    public PaymentDTO payerCountryCode(String payerCountryCode) {
+        this.payerCountryCode = payerCountryCode;
+        return this;
+    }
+
+    public PaymentDTO payerEmail(String payerEmail) {
+        this.payerEmail = payerEmail;
+        return this;
+    }
+
+    public PaymentDTO payerName(String payerName) {
+        this.payerName = payerName;
+        return this;
+    }
+
+    public PaymentDTO payerSurname(String payerSurname) {
+        this.payerSurname = payerSurname;
+        return this;
+    }
+
+    public PaymentDTO payerId(String payerId) {
+        this.payerId = payerId;
+        return this;
+    }
+
+    public PaymentDTO currency(String currency) {
+        this.currency = currency;
+        return this;
+    }
+
+    public PaymentDTO amount(BigDecimal amount) {
+        this.amount = amount;
+        return this;
+    }
+
+    public PaymentDTO paymentId(String paymentId) {
+        this.paymentId = paymentId;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

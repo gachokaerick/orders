@@ -48,6 +48,10 @@ public class PaymentDomain {
         return payment;
     }
 
+    public void setOrder(Payment payment, Order order) {
+        payment.setOrder(order);
+    }
+
     public static class PaymentBuilder {
 
         private PaymentDTO paymentDTO;
