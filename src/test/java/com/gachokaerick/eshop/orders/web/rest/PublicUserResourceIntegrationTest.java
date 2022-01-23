@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.gachokaerick.eshop.orders.IntegrationTest;
-import com.gachokaerick.eshop.orders.config.TestSecurityConfiguration;
 import com.gachokaerick.eshop.orders.domain.User;
 import com.gachokaerick.eshop.orders.repository.UserRepository;
 import com.gachokaerick.eshop.orders.security.AuthoritiesConstants;
@@ -27,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @IntegrationTest
-class PublicUserResourceIT {
+class PublicUserResourceIntegrationTest {
 
     private static final String DEFAULT_LOGIN = "johndoe";
 
@@ -53,7 +52,7 @@ class PublicUserResourceIT {
 
     @BeforeEach
     public void initTest() {
-        user = UserResourceIT.initTestUser(userRepository, em);
+        user = UserResourceIntegrationTest.initTestUser(userRepository, em);
     }
 
     @Test

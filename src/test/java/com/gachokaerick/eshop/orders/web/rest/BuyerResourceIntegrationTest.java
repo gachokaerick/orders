@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-class BuyerResourceIT {
+class BuyerResourceIntegrationTest {
 
     private static final String DEFAULT_FIRST_NAME = "AAAAAAAAAA";
     private static final String UPDATED_FIRST_NAME = "BBBBBBBBBB";
@@ -92,7 +92,7 @@ class BuyerResourceIT {
         BuyerDomain buyerDomain = new BuyerDomain.BuyerBuilder().withDTO(buyerDTO).build();
         Buyer buyer = buyerDomain.toEntity(null);
         // Add required entity
-        User user = UserResourceIT.createEntity(em);
+        User user = UserResourceIntegrationTest.createEntity(em);
         em.persist(user);
         em.flush();
         buyerDomain.setUser(buyer, user);
@@ -110,7 +110,7 @@ class BuyerResourceIT {
         BuyerDomain buyerDomain = new BuyerDomain.BuyerBuilder().withDTO(buyerDTO).build();
         Buyer buyer = buyerDomain.toEntity(null);
         // Add required entity
-        User user = UserResourceIT.createEntity(em);
+        User user = UserResourceIntegrationTest.createEntity(em);
         em.persist(user);
         em.flush();
         buyerDomain.setUser(buyer, user);

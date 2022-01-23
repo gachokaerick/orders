@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-class OrderResourceIT {
+class OrderResourceIntegrationTest {
 
     private static final ZonedDateTime DEFAULT_ORDER_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_ORDER_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
@@ -101,7 +101,7 @@ class OrderResourceIT {
         // Add required entity
         Address address;
         if (TestUtil.findAll(em, Address.class).isEmpty()) {
-            address = AddressResourceIT.createEntity(em);
+            address = AddressResourceIntegrationTest.createEntity(em);
             em.persist(address);
             em.flush();
         } else {
@@ -112,7 +112,7 @@ class OrderResourceIT {
         // Add required entity
         Buyer buyer;
         if (TestUtil.findAll(em, Buyer.class).isEmpty()) {
-            buyer = BuyerResourceIT.createEntity(em);
+            buyer = BuyerResourceIntegrationTest.createEntity(em);
             em.persist(buyer);
             em.flush();
         } else {
@@ -140,7 +140,7 @@ class OrderResourceIT {
         // Add required entity
         Address address;
         if (TestUtil.findAll(em, Address.class).isEmpty()) {
-            address = AddressResourceIT.createUpdatedEntity(em);
+            address = AddressResourceIntegrationTest.createUpdatedEntity(em);
             em.persist(address);
             em.flush();
         } else {
@@ -151,7 +151,7 @@ class OrderResourceIT {
         // Add required entity
         Buyer buyer;
         if (TestUtil.findAll(em, Buyer.class).isEmpty()) {
-            buyer = BuyerResourceIT.createUpdatedEntity(em);
+            buyer = BuyerResourceIntegrationTest.createUpdatedEntity(em);
             em.persist(buyer);
             em.flush();
         } else {

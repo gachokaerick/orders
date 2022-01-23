@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-class AddressResourceIT {
+class AddressResourceIntegrationTest {
 
     private static final String DEFAULT_STREET = "AAAAAAAAAA";
     private static final String UPDATED_STREET = "BBBBBBBBBB";
@@ -88,7 +88,7 @@ class AddressResourceIT {
         // Add required entity
         Buyer buyer;
         if (TestUtil.findAll(em, Buyer.class).isEmpty()) {
-            buyer = BuyerResourceIT.createEntity(em);
+            buyer = BuyerResourceIntegrationTest.createEntity(em);
             em.persist(buyer);
             em.flush();
         } else {
@@ -114,7 +114,7 @@ class AddressResourceIT {
         // Add required entity
         Buyer buyer;
         if (TestUtil.findAll(em, Buyer.class).isEmpty()) {
-            buyer = BuyerResourceIT.createUpdatedEntity(em);
+            buyer = BuyerResourceIntegrationTest.createUpdatedEntity(em);
             em.persist(buyer);
             em.flush();
         } else {

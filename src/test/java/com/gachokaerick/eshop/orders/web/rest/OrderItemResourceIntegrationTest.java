@@ -36,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-class OrderItemResourceIT {
+class OrderItemResourceIntegrationTest {
 
     private static final String DEFAULT_PRODUCT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_PRODUCT_NAME = "BBBBBBBBBB";
@@ -127,7 +127,7 @@ class OrderItemResourceIT {
         // Add required entity
         Order order;
         if (TestUtil.findAll(em, Order.class).isEmpty()) {
-            order = OrderResourceIT.createEntity(em, am, bm);
+            order = OrderResourceIntegrationTest.createEntity(em, am, bm);
             em.persist(order);
             em.flush();
         } else {
@@ -152,7 +152,7 @@ class OrderItemResourceIT {
         // Add required entity
         Order order;
         if (TestUtil.findAll(em, Order.class).isEmpty()) {
-            order = OrderResourceIT.createUpdatedEntity(em);
+            order = OrderResourceIntegrationTest.createUpdatedEntity(em);
             em.persist(order);
             em.flush();
         } else {

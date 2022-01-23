@@ -3,7 +3,6 @@ package com.gachokaerick.eshop.orders.web.rest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -13,7 +12,6 @@ import com.gachokaerick.eshop.orders.domain.User;
 import com.gachokaerick.eshop.orders.repository.UserRepository;
 import com.gachokaerick.eshop.orders.security.AuthoritiesConstants;
 import com.gachokaerick.eshop.orders.service.dto.AdminUserDTO;
-import com.gachokaerick.eshop.orders.service.dto.UserDTO;
 import com.gachokaerick.eshop.orders.service.mapper.UserMapper;
 import java.time.Instant;
 import java.util.*;
@@ -36,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @IntegrationTest
-class UserResourceIT {
+class UserResourceIntegrationTest {
 
     private static final String DEFAULT_LOGIN = "johndoe";
 

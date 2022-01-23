@@ -43,7 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-class PaymentResourceIT {
+class PaymentResourceIntegrationTest {
 
     private static final ZonedDateTime DEFAULT_CREATE_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_CREATE_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
@@ -157,7 +157,7 @@ class PaymentResourceIT {
         // Add required entity
         Order order;
         if (TestUtil.findAll(em, Order.class).isEmpty()) {
-            order = OrderResourceIT.createEntity(em, addressMapper, buyerMapper);
+            order = OrderResourceIntegrationTest.createEntity(em, addressMapper, buyerMapper);
             em.persist(order);
             em.flush();
         } else {
@@ -182,7 +182,7 @@ class PaymentResourceIT {
         // Add required entity
         Order order;
         if (TestUtil.findAll(em, Order.class).isEmpty()) {
-            order = OrderResourceIT.createUpdatedEntity(em);
+            order = OrderResourceIntegrationTest.createUpdatedEntity(em);
             em.persist(order);
             em.flush();
         } else {

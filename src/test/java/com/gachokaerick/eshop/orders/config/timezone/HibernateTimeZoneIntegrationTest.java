@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the ZoneId Hibernate configuration.
  */
 @IntegrationTest
-class HibernateTimeZoneIT {
+class HibernateTimeZoneIntegrationTest {
 
     @Autowired
     private DateTimeWrapperRepository dateTimeWrapperRepository;
