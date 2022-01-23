@@ -1,5 +1,6 @@
 package com.gachokaerick.eshop.orders.domain.aggregates.buyer;
 
+import com.gachokaerick.eshop.orders.domain.Address;
 import com.gachokaerick.eshop.orders.domain.User;
 import com.gachokaerick.eshop.orders.domain.exception.DomainException;
 import com.gachokaerick.eshop.orders.service.dto.BuyerDTO;
@@ -49,6 +50,10 @@ public class BuyerDomain {
             throw DomainException.throwDomainException(domainName, "User for a buyer must exist");
         }
         buyer.setUser(user);
+    }
+
+    public void addAddress(Buyer buyer, Address address) {
+        buyer.addAddresses(address);
     }
 
     public static class BuyerBuilder {

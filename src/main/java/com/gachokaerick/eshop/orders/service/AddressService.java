@@ -2,6 +2,7 @@ package com.gachokaerick.eshop.orders.service;
 
 import com.gachokaerick.eshop.orders.domain.Address;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerDomain;
 import com.gachokaerick.eshop.orders.repository.AddressRepository;
 import com.gachokaerick.eshop.orders.repository.BuyerRepository;
 import com.gachokaerick.eshop.orders.service.dto.AddressDTO;
@@ -45,12 +46,16 @@ public class AddressService {
         if (addressDTO.getId() != null) {
             address = addressRepository.findById(addressDTO.getId()).orElseThrow();
             addressMapper.partialUpdate(address, addressDTO);
+            address = addressRepository.save(address);
         } else {
             Buyer buyer = buyerRepository.findById(addressDTO.getBuyer().getId()).orElseThrow();
             address = addressMapper.toEntity(addressDTO);
             address.setBuyer(buyer);
+            BuyerDomain buyerDomain = new BuyerDomain.BuyerBuilder().withDTO(addressDTO.getBuyer()).build();
+            buyerDomain.addAddress(buyer, address);
+            address = addressRepository.save(address);
+            buyerRepository.save(buyer);
         }
-        address = addressRepository.save(address);
         return addressMapper.toDto(address);
     }
 
