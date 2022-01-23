@@ -1,6 +1,5 @@
 package com.gachokaerick.eshop.orders;
 
-import com.gachokaerick.eshop.orders.OrdersApp;
 import com.gachokaerick.eshop.orders.config.TestSecurityConfiguration;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

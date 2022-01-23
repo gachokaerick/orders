@@ -10,6 +10,7 @@ import com.gachokaerick.eshop.orders.IntegrationTest;
 import com.gachokaerick.eshop.orders.domain.Address;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
 import com.gachokaerick.eshop.orders.repository.AddressRepository;
+import com.gachokaerick.eshop.orders.repository.BuyerRepository;
 import com.gachokaerick.eshop.orders.service.dto.AddressDTO;
 import com.gachokaerick.eshop.orders.service.mapper.AddressMapper;
 import java.util.List;
@@ -62,6 +63,9 @@ class AddressResourceIT {
 
     @Autowired
     private EntityManager em;
+
+    @Autowired
+    private BuyerRepository buyerRepository;
 
     @Autowired
     private MockMvc restAddressMockMvc;
@@ -142,6 +146,7 @@ class AddressResourceIT {
 
         // Validate the Address in the database
         List<Address> addressList = addressRepository.findAll();
+        List<Buyer> buyerList = buyerRepository.findAll();
         assertThat(addressList).hasSize(databaseSizeBeforeCreate + 1);
         Address testAddress = addressList.get(addressList.size() - 1);
         assertThat(testAddress.getStreet()).isEqualTo(DEFAULT_STREET);
@@ -149,6 +154,7 @@ class AddressResourceIT {
         assertThat(testAddress.getTown()).isEqualTo(DEFAULT_TOWN);
         assertThat(testAddress.getCountry()).isEqualTo(DEFAULT_COUNTRY);
         assertThat(testAddress.getZipcode()).isEqualTo(DEFAULT_ZIPCODE);
+        assertThat(buyerList.stream().anyMatch(it -> it.getAddresses().contains(testAddress))).isTrue();
     }
 
     @Test
