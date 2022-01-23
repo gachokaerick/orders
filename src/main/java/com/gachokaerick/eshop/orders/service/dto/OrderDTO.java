@@ -119,6 +119,21 @@ public class OrderDTO implements Serializable {
         this.balance = balance;
     }
 
+    public OrderDTO orderDate(ZonedDateTime orderDate) {
+        this.orderDate = orderDate;
+        return this;
+    }
+
+    public OrderDTO orderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+        return this;
+    }
+
+    public OrderDTO description(String description) {
+        this.description = description;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

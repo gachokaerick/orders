@@ -10,10 +10,13 @@
 //import com.gachokaerick.eshop.orders.IntegrationTest;
 //import com.gachokaerick.eshop.orders.domain.aggregates.order.Order;
 //import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderItem;
+//import com.gachokaerick.eshop.orders.domain.enumeration.OrderStatus;
 //import com.gachokaerick.eshop.orders.repository.OrderItemRepository;
+//import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
 //import com.gachokaerick.eshop.orders.service.dto.OrderItemDTO;
 //import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderItemMapper;
 //import java.math.BigDecimal;
+//import java.time.ZonedDateTime;
 //import java.util.List;
 //import java.util.Random;
 //import java.util.concurrent.atomic.AtomicLong;
@@ -56,6 +59,8 @@
 //    private static final String ENTITY_API_URL = "/api/order-items";
 //    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 //
+//    private static final OrderDTO ORDER_DTO = new OrderDTO(1L, ZonedDateTime.now(), OrderStatus.DRAFT);
+//
 //    private static Random random = new Random();
 //    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 //
@@ -72,6 +77,19 @@
 //    private MockMvc restOrderItemMockMvc;
 //
 //    private OrderItem orderItem;
+//
+//    static OrderItemDTO getOrderItemDTO() {
+//        return new OrderItemDTO(
+//            null,
+//            DEFAULT_PRODUCT_NAME,
+//            DEFAULT_PICTURE_URL,
+//            DEFAULT_UNIT_PRICE,
+//            DEFAULT_DISCOUNT,
+//            DEFAULT_UNITS,
+//            DEFAULT_PRODUCT_ID,
+//            ORDER_DTO
+//        );
+//    }
 //
 //    /**
 //     * Create an entity for this test.

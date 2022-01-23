@@ -1,6 +1,7 @@
 package com.gachokaerick.eshop.orders.domain.aggregates.order;
 
 import com.gachokaerick.eshop.orders.domain.Address;
+import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
 import com.gachokaerick.eshop.orders.domain.enumeration.OrderStatus;
 import com.gachokaerick.eshop.orders.domain.exception.DomainException;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
@@ -86,6 +87,13 @@ public class OrderDomain {
             throw DomainException.throwDomainException(domainName, "Address for an order must exist");
         }
         order.setAddress(address);
+    }
+
+    public void setBuyer(Order order, Buyer buyer) {
+        if (buyer == null || buyer.getId() == null) {
+            throw DomainException.throwDomainException(domainName, "Buyer for an order must exist");
+        }
+        order.setBuyer(buyer);
     }
 
     public void addOrderItem(Order order, OrderItem orderItem) {
