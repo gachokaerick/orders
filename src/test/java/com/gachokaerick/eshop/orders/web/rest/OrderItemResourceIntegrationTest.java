@@ -3,6 +3,7 @@ package com.gachokaerick.eshop.orders.web.rest;
 import static com.gachokaerick.eshop.orders.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -12,12 +13,14 @@ import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerMapper;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.*;
 import com.gachokaerick.eshop.orders.domain.enumeration.OrderStatus;
 import com.gachokaerick.eshop.orders.repository.OrderItemRepository;
+import com.gachokaerick.eshop.orders.repository.OrderRepository;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
 import com.gachokaerick.eshop.orders.service.dto.OrderItemDTO;
 import com.gachokaerick.eshop.orders.service.mapper.AddressMapper;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
@@ -86,6 +89,9 @@ class OrderItemResourceIntegrationTest {
 
     @Autowired
     private BuyerMapper buyerMapper;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     private OrderItem orderItem;
 
@@ -195,6 +201,11 @@ class OrderItemResourceIntegrationTest {
         assertThat(testOrderItem.getDiscount()).isEqualByComparingTo(DEFAULT_DISCOUNT);
         assertThat(testOrderItem.getUnits()).isEqualTo(DEFAULT_UNITS);
         assertThat(testOrderItem.getProductId()).isEqualTo(DEFAULT_PRODUCT_ID);
+        assertThat(testOrderItem.getOrder().getOrderItems().contains(testOrderItem)).isTrue();
+
+        Optional<Order> orderOptional = orderRepository.findById(testOrderItem.getOrder().getId());
+        assertThat(orderOptional.isPresent()).isTrue();
+        assertThat(orderOptional.get().getOrderItems().contains(testOrderItem)).isTrue();
     }
 
     @Test

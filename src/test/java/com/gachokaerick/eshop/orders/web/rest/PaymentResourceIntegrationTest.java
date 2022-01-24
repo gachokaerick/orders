@@ -15,6 +15,7 @@ import com.gachokaerick.eshop.orders.domain.aggregates.order.Payment;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.PaymentDomain;
 import com.gachokaerick.eshop.orders.domain.aggregates.order.PaymentMapper;
 import com.gachokaerick.eshop.orders.domain.enumeration.OrderStatus;
+import com.gachokaerick.eshop.orders.repository.OrderRepository;
 import com.gachokaerick.eshop.orders.repository.PaymentRepository;
 import com.gachokaerick.eshop.orders.service.dto.OrderDTO;
 import com.gachokaerick.eshop.orders.service.dto.PaymentDTO;
@@ -25,6 +26,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
@@ -106,6 +108,9 @@ class PaymentResourceIntegrationTest {
 
     @Autowired
     private BuyerMapper buyerMap;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     private Payment payment;
 
@@ -219,6 +224,7 @@ class PaymentResourceIntegrationTest {
 
         // Validate the Payment in the database
         List<Payment> paymentList = paymentRepository.findAll();
+        List<Order> orderList = orderRepository.findAll();
         assertThat(paymentList).hasSize(databaseSizeBeforeCreate + 1);
         Payment testPayment = paymentList.get(paymentList.size() - 1);
         assertThat(testPayment.getCreateTime()).isEqualTo(DEFAULT_CREATE_TIME);
@@ -232,6 +238,10 @@ class PaymentResourceIntegrationTest {
         assertThat(testPayment.getCurrency()).isEqualTo(DEFAULT_CURRENCY);
         assertThat(testPayment.getAmount()).isEqualByComparingTo(DEFAULT_AMOUNT);
         assertThat(testPayment.getPaymentId()).isEqualTo(DEFAULT_PAYMENT_ID);
+
+        Optional<Order> orderOptional = orderRepository.findById(testPayment.getOrder().getId());
+        assertThat(orderOptional.isPresent()).isTrue();
+        assertThat(orderOptional.get().getPayments().contains(testPayment)).isTrue();
     }
 
     @Test
