@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 
@@ -32,6 +34,8 @@ public class OrderDTO implements Serializable {
     private BigDecimal total;
 
     private BigDecimal balance;
+
+    private List<OrderItemDTO> orderItemDTOS = new ArrayList<>();
 
     public OrderDTO() {}
 
@@ -132,6 +136,19 @@ public class OrderDTO implements Serializable {
     public OrderDTO description(String description) {
         this.description = description;
         return this;
+    }
+
+    public List<OrderItemDTO> getOrderItemDTOS() {
+        return orderItemDTOS;
+    }
+
+    public void setOrderItemDTOS(List<OrderItemDTO> orderItemDTOS) {
+        this.orderItemDTOS = orderItemDTOS;
+    }
+
+    public void addOrderItemDTO(OrderItemDTO orderItemDTO) {
+        this.orderItemDTOS.add(orderItemDTO);
+        orderItemDTO.setOrder(this);
     }
 
     @Override

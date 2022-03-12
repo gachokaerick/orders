@@ -31,23 +31,26 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final OrderItemRepository orderItemRepository;
     private final PaymentRepository paymentRepository;
+    private final OrderItemMapper orderItemMapper;
 
     public OrderService(
         OrderRepository orderRepository,
         AddressRepository addressRepository,
         OrderMapper orderMapper,
         OrderItemRepository orderItemRepository,
-        PaymentRepository paymentRepository
+        PaymentRepository paymentRepository,
+        OrderItemMapper orderItemMapper
     ) {
         this.orderRepository = orderRepository;
         this.addressRepository = addressRepository;
         this.orderMapper = orderMapper;
         this.orderItemRepository = orderItemRepository;
         this.paymentRepository = paymentRepository;
+        this.orderItemMapper = orderItemMapper;
     }
 
     /**
-     * Save a order.
+     * Save an order.
      *
      * @param orderDTO the entity to save.
      * @return the persisted entity.
@@ -65,6 +68,19 @@ public class OrderService {
         }
 
         order = orderRepository.save(order);
+        orderDTO.setId(order.getId());
+
+        // save order items
+        if (orderDTO.getOrderItemDTOS() != null) {
+            orderDTO
+                .getOrderItemDTOS()
+                .forEach(orderItemDTO -> {
+                    orderItemDTO.setOrder(orderDTO);
+                    OrderItem orderItem = addOrderItem(orderItemDTO);
+                    orderDTO.addOrderItemDTO(orderItemMapper.toDto(orderItem));
+                });
+        }
+
         return orderMapper.toDto(order);
     }
 
