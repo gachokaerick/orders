@@ -35,7 +35,9 @@ public class OrderDTO implements Serializable {
 
     private BigDecimal balance;
 
-    private List<OrderItemDTO> orderItemDTOS = new ArrayList<>();
+    private List<OrderItemDTO> orderItems = new ArrayList<>();
+
+    private List<PaymentDTO> payments = new ArrayList<>();
 
     public OrderDTO() {}
 
@@ -138,17 +140,30 @@ public class OrderDTO implements Serializable {
         return this;
     }
 
-    public List<OrderItemDTO> getOrderItemDTOS() {
-        return orderItemDTOS;
+    public List<OrderItemDTO> getOrderItems() {
+        return orderItems;
     }
 
-    public void setOrderItemDTOS(List<OrderItemDTO> orderItemDTOS) {
-        this.orderItemDTOS = orderItemDTOS;
+    public void setOrderItems(List<OrderItemDTO> orderItems) {
+        this.orderItems = orderItems;
     }
 
     public void addOrderItemDTO(OrderItemDTO orderItemDTO) {
-        this.orderItemDTOS.add(orderItemDTO);
+        this.orderItems.add(orderItemDTO);
         orderItemDTO.setOrder(this);
+    }
+
+    public void addPaymentDTO(PaymentDTO paymentDTO) {
+        this.payments.add(paymentDTO);
+        paymentDTO.setOrder(this);
+    }
+
+    public List<PaymentDTO> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<PaymentDTO> payments) {
+        this.payments = payments;
     }
 
     @Override

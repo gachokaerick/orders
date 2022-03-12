@@ -32,6 +32,7 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final PaymentRepository paymentRepository;
     private final OrderItemMapper orderItemMapper;
+    private final PaymentMapper paymentMapper;
 
     public OrderService(
         OrderRepository orderRepository,
@@ -39,7 +40,8 @@ public class OrderService {
         OrderMapper orderMapper,
         OrderItemRepository orderItemRepository,
         PaymentRepository paymentRepository,
-        OrderItemMapper orderItemMapper
+        OrderItemMapper orderItemMapper,
+        PaymentMapper paymentMapper
     ) {
         this.orderRepository = orderRepository;
         this.addressRepository = addressRepository;
@@ -47,6 +49,7 @@ public class OrderService {
         this.orderItemRepository = orderItemRepository;
         this.paymentRepository = paymentRepository;
         this.orderItemMapper = orderItemMapper;
+        this.paymentMapper = paymentMapper;
     }
 
     /**
@@ -71,13 +74,24 @@ public class OrderService {
         orderDTO.setId(order.getId());
 
         // save order items
-        if (orderDTO.getOrderItemDTOS() != null) {
+        if (orderDTO.getOrderItems() != null) {
             orderDTO
-                .getOrderItemDTOS()
+                .getOrderItems()
                 .forEach(orderItemDTO -> {
                     orderItemDTO.setOrder(orderDTO);
                     OrderItem orderItem = addOrderItem(orderItemDTO);
                     orderDTO.addOrderItemDTO(orderItemMapper.toDto(orderItem));
+                });
+        }
+
+        // save payments
+        if (orderDTO.getPayments() != null) {
+            orderDTO
+                .getPayments()
+                .forEach(paymentDTO -> {
+                    paymentDTO.setOrder(orderDTO);
+                    Payment payment = addPayment(paymentDTO);
+                    orderDTO.addPaymentDTO(paymentMapper.toDto(payment));
                 });
         }
 

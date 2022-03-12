@@ -102,6 +102,9 @@ public class OrderDomain {
 
     public void addPayment(Order order, Payment payment) {
         order.addPayments(payment);
+        if (order.getPaymentsTotal().compareTo(order.getTotal()) >= 0 && order.getOrderStatus().equals(OrderStatus.DRAFT)) {
+            order.setOrderStatus(OrderStatus.PAID);
+        }
     }
 
     public void removeOrderItem(Order order, OrderItem orderItem) {

@@ -202,6 +202,10 @@ public class Order implements Serializable {
         payment.setOrder(null);
     }
 
+    BigDecimal getPaymentsTotal() {
+        return getPayments().parallelStream().map(Payment::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
     public Long getBuyerId() {
         return buyerId;
     }

@@ -46,10 +46,6 @@ public class PaymentService {
             payment = paymentDomain.toEntity(paymentRepository.getById(paymentDTO.getId()));
             payment = paymentRepository.save(payment);
         } else {
-            if (paymentDTO.getOrder().getId() == null) {
-                // create order
-                paymentDTO.setOrder(orderService.save(paymentDTO.getOrder()));
-            }
             payment = orderService.addPayment(paymentDTO);
         }
 
