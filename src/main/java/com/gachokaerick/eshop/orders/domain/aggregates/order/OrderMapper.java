@@ -13,7 +13,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Order} and its DTO {@link OrderDTO}.
  */
-@Mapper(componentModel = "spring", uses = { AddressMapper.class, BuyerMapper.class })
+@Mapper(componentModel = "spring", uses = { AddressMapper.class, BuyerMapper.class, OrderItemMapper.class, PaymentMapper.class })
 public interface OrderMapper extends EntityMapper<OrderDTO, Order> {
     @Mapping(target = "address", source = "address", qualifiedByName = "town")
     @Mapping(target = "buyer", source = "buyer", qualifiedByName = "email")
