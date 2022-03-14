@@ -89,9 +89,6 @@ public class PaymentDomain {
             if (paymentDTO.getId() == null && paymentDTO.getOrder() == null) {
                 throw DomainException.throwDomainException(domainName, "order for payment is required");
             }
-            if (paymentDTO.getId() == null && !paymentDTO.getOrder().getTotal().equals(paymentDTO.getAmount())) {
-                throw DomainException.throwDomainException(domainName, "order must be paid for in full");
-            }
 
             return true;
         }

@@ -362,6 +362,7 @@ class OrderDomainTest {
     @Test
     void removePayment() {
         OrderDTO orderDTO = getDTO();
+        orderDTO.setTotal(paymentDTO1.getAmount());
         OrderDomain orderDomain = new OrderDomain.OrderBuilder().withOrderDTO(orderDTO).build();
         Order order = orderDomain.toEntity(null);
         Payment payment = new PaymentDomain.PaymentBuilder().withDTO(paymentDTO1).build().toEntity(null);

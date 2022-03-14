@@ -271,6 +271,53 @@ class AddressResourceIntegrationTest {
 
     @Test
     @Transactional
+    void getAllAddressesByParams() throws Exception {
+        // Initialize the database
+        Address item = addressRepository.saveAndFlush(address);
+
+        String s =
+            "?ids=" +
+            item.getId() +
+            "&" +
+            "street=" +
+            DEFAULT_STREET +
+            "&" +
+            "city=" +
+            DEFAULT_CITY +
+            "&" +
+            "town=" +
+            DEFAULT_TOWN +
+            "&" +
+            "country=" +
+            DEFAULT_COUNTRY +
+            "&" +
+            "zipcode=" +
+            DEFAULT_ZIPCODE +
+            "&" +
+            "login=" +
+            address.getBuyer().getUser().getLogin() +
+            "&" +
+            "term=" +
+            "AAA" +
+            "&" +
+            "sort=id,desc";
+
+        // Get all the addressList
+        restAddressMockMvc
+            .perform(get(ENTITY_API_URL + s))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(address.getId().intValue())))
+            .andExpect(jsonPath("$.[*].street").value(hasItem(DEFAULT_STREET)))
+            .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
+            .andExpect(jsonPath("$.[*].town").value(hasItem(DEFAULT_TOWN)))
+            .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
+            .andExpect(jsonPath("$.[*].zipcode").value(hasItem(DEFAULT_ZIPCODE)))
+            .andExpect(jsonPath("$.[*].buyer.user.login").value(hasItem(address.getBuyer().getUser().getLogin())));
+    }
+
+    @Test
+    @Transactional
     void getAddress() throws Exception {
         // Initialize the database
         addressRepository.saveAndFlush(address);

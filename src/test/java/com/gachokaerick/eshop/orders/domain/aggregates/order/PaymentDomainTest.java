@@ -153,47 +153,6 @@ class PaymentDomainTest {
                     () -> new PaymentDomain.PaymentBuilder().withDTO(paymentDTO).build()
                 );
                 assertTrue(exception.getMessage().contains("order for payment is required"));
-            },
-            () -> {
-                PaymentDTO paymentDTO = getDTO();
-                paymentDTO.getOrder().setId(null);
-                Exception exception = assertThrows(
-                    DomainException.class,
-                    () -> new PaymentDomain.PaymentBuilder().withDTO(paymentDTO).build()
-                );
-                assertTrue(exception.getMessage().contains("order ID for payment is required"));
-            }
-        );
-    }
-
-    @Test
-    void testOrderIsRequiredIfOrderIsSet() {
-        assertAll(
-            () -> {
-                PaymentDTO paymentDTO = getDTO();
-                paymentDTO.setId(1L);
-                paymentDTO.getOrder().setId(null);
-                Exception exception = assertThrows(
-                    DomainException.class,
-                    () -> new PaymentDomain.PaymentBuilder().withDTO(paymentDTO).build()
-                );
-                assertTrue(exception.getMessage().contains("order ID for payment is required"));
-            },
-            () -> {
-                PaymentDTO paymentDTO = getDTO();
-                paymentDTO.setId(null);
-                paymentDTO.getOrder().setId(null);
-                Exception exception = assertThrows(
-                    DomainException.class,
-                    () -> new PaymentDomain.PaymentBuilder().withDTO(paymentDTO).build()
-                );
-                assertTrue(exception.getMessage().contains("order ID for payment is required"));
-            },
-            () -> {
-                PaymentDTO paymentDTO = getDTO();
-                paymentDTO.setId(1L);
-                paymentDTO.setOrder(null);
-                assertDoesNotThrow(() -> new PaymentDomain.PaymentBuilder().withDTO(paymentDTO).build());
             }
         );
     }

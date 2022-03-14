@@ -13,7 +13,7 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = { BuyerMapper.class })
 public interface AddressMapper extends EntityMapper<AddressDTO, Address> {
-    @Mapping(target = "buyer", source = "buyer", qualifiedByName = "email")
+    @Mapping(target = "buyer", source = "buyer")
     AddressDTO toDto(Address s);
 
     @Named("town")

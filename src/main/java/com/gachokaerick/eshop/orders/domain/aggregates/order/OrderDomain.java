@@ -102,8 +102,18 @@ public class OrderDomain {
 
     public void addPayment(Order order, Payment payment) {
         order.addPayments(payment);
-        if (order.getPaymentsTotal().compareTo(order.getTotal()) >= 0 && order.getOrderStatus().equals(OrderStatus.DRAFT)) {
+        updateOrderStatus(order);
+    }
+
+    private void updateOrderStatus(Order order) {
+        BigDecimal total = calculateItemsTotal(order);
+        BigDecimal paymentsTotal = calculateTotalPaid(order);
+        if (
+            total.compareTo(BigDecimal.ZERO) > 0 && paymentsTotal.compareTo(total) >= 0 && order.getOrderStatus().equals(OrderStatus.DRAFT)
+        ) {
             order.setOrderStatus(OrderStatus.PAID);
+        } else {
+            order.setOrderStatus(OrderStatus.DRAFT);
         }
     }
 
@@ -113,6 +123,7 @@ public class OrderDomain {
 
     public void removePayment(Order order, Payment payment) {
         order.removePayments(payment);
+        updateOrderStatus(order);
     }
 
     public static class OrderBuilder {
