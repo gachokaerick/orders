@@ -10,8 +10,11 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -145,9 +148,23 @@ public class AddressResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of addresses in body.
      */
     @GetMapping("/addresses")
-    public ResponseEntity<List<AddressDTO>> getAllAddresses(Pageable pageable) {
+    public ResponseEntity<List<AddressDTO>> getAllAddresses(
+        @RequestParam(name = "ids", required = false) String idsString,
+        @RequestParam(name = "street", required = false) String street,
+        @RequestParam(name = "city", required = false) String city,
+        @RequestParam(name = "town", required = false) String town,
+        @RequestParam(name = "country", required = false) String country,
+        @RequestParam(name = "zipcode", required = false) String zipcode,
+        @RequestParam(name = "term", required = false) String term,
+        @RequestParam(name = "login", required = false) String login,
+        Pageable pageable
+    ) {
         log.debug("REST request to get a page of Addresses");
-        Page<AddressDTO> page = addressService.findAll(pageable);
+        List<Long> ids = null;
+        if (idsString != null) {
+            ids = Stream.of(idsString.split(",")).map(NumberUtils::createLong).collect(Collectors.toList());
+        }
+        Page<AddressDTO> page = addressService.findAll(ids, street, city, town, country, zipcode, login, term, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

@@ -4,14 +4,17 @@ import com.gachokaerick.eshop.orders.domain.Address;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.Buyer;
 import com.gachokaerick.eshop.orders.domain.aggregates.buyer.BuyerDomain;
 import com.gachokaerick.eshop.orders.repository.AddressRepository;
+import com.gachokaerick.eshop.orders.repository.AddressSpecification;
 import com.gachokaerick.eshop.orders.repository.BuyerRepository;
 import com.gachokaerick.eshop.orders.service.dto.AddressDTO;
 import com.gachokaerick.eshop.orders.service.mapper.AddressMapper;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,9 +89,29 @@ public class AddressService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<AddressDTO> findAll(Pageable pageable) {
+    public Page<AddressDTO> findAll(
+        List<Long> ids,
+        String street,
+        String city,
+        String town,
+        String country,
+        String zipcode,
+        String login,
+        String term,
+        Pageable pageable
+    ) {
         log.debug("Request to get all Addresses");
-        return addressRepository.findAll(pageable).map(addressMapper::toDto);
+        Specification<Address> specification = AddressSpecification.getAddressSpecification(
+            ids,
+            street,
+            city,
+            town,
+            country,
+            zipcode,
+            login,
+            term
+        );
+        return addressRepository.findAll(specification, pageable).map(addressMapper::toDto);
     }
 
     /**
