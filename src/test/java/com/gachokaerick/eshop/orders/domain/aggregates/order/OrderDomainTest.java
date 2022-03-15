@@ -48,7 +48,7 @@ class OrderDomainTest {
         null,
         ZonedDateTime.now(),
         ZonedDateTime.now(),
-        "complete",
+        "COMPLETED",
         "KE",
         "johndoe@example.com",
         "john",
@@ -63,7 +63,7 @@ class OrderDomainTest {
         null,
         ZonedDateTime.now(),
         ZonedDateTime.now(),
-        "complete",
+        "COMPLETED",
         "KE",
         "johndoe@example.com",
         "john",
@@ -270,6 +270,27 @@ class OrderDomainTest {
                 order.addPayments(new PaymentDomain.PaymentBuilder().withDTO(paymentDTO1).build().toEntity(null));
                 order.addPayments(new PaymentDomain.PaymentBuilder().withDTO(paymentDTO2).build().toEntity(null));
                 assertEquals(BigDecimal.valueOf(300), orderDomain.calculateTotalPaid(order));
+            },
+            () -> {
+                Order order = orderDomain.toEntity(null);
+                PaymentDTO payment2 = new PaymentDTO(
+                    null,
+                    ZonedDateTime.now(),
+                    ZonedDateTime.now(),
+                    "NOT_COMPLETED",
+                    "KE",
+                    "johndoe@example.com",
+                    "john",
+                    "doe",
+                    "232",
+                    "KES",
+                    BigDecimal.valueOf(54),
+                    "fddfgdf",
+                    getDTO().withId(1L)
+                );
+                order.addPayments(new PaymentDomain.PaymentBuilder().withDTO(paymentDTO1).build().toEntity(null));
+                order.addPayments(new PaymentDomain.PaymentBuilder().withDTO(payment2).build().toEntity(null));
+                assertEquals(BigDecimal.valueOf(246), orderDomain.calculateTotalPaid(order));
             }
         );
     }

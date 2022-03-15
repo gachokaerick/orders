@@ -71,11 +71,12 @@ public class OrderDomain {
         if (order.getPayments() == null) {
             throw DomainException.throwDomainException(domainName, "Cannot calculate items total for null order payments");
         }
-        BigDecimal total = BigDecimal.ZERO;
-        for (Payment payment : order.getPayments()) {
-            total = total.add(payment.getAmount());
-        }
-        return total;
+        return order
+            .getPayments()
+            .parallelStream()
+            .filter(payment -> payment.getPaymentStatus().equals("COMPLETED"))
+            .map(Payment::getAmount)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public BigDecimal calculateOrderBalance(Order order) {
