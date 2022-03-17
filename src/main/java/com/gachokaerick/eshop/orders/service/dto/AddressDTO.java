@@ -130,7 +130,6 @@ public class AddressDTO implements Serializable {
             ", town='" + getTown() + "'" +
             ", country='" + getCountry() + "'" +
             ", zipcode='" + getZipcode() + "'" +
-            ", buyer=" + getBuyer() +
             "}";
     }
 

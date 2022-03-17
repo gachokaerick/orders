@@ -79,8 +79,7 @@ public class OrderService {
                 .getOrderItems()
                 .forEach(orderItemDTO -> {
                     orderItemDTO.setOrder(orderDTO);
-                    OrderItem orderItem = addOrderItem(orderItemDTO);
-                    orderDTO.addOrderItemDTO(orderItemMapper.toDto(orderItem));
+                    addOrderItem(orderItemDTO);
                 });
         }
 
@@ -90,8 +89,7 @@ public class OrderService {
                 .getPayments()
                 .forEach(paymentDTO -> {
                     paymentDTO.setOrder(orderDTO);
-                    Payment payment = addPayment(paymentDTO);
-                    orderDTO.addPaymentDTO(paymentMapper.toDto(payment));
+                    addPayment(paymentDTO);
                 });
         }
 

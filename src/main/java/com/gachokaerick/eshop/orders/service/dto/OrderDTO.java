@@ -195,7 +195,7 @@ public class OrderDTO implements Serializable {
             "id=" + id +
             ", orderDate=" + orderDate +
             ", orderStatus=" + orderStatus +
-            ", description='" + description + '\'' +
+            ", description='" + description +
             ", address=" + address +
             ", buyer=" + buyer +
             ", total=" + total +

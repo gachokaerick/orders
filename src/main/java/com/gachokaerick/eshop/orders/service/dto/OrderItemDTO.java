@@ -183,7 +183,6 @@ public class OrderItemDTO implements Serializable {
             ", discount=" + getDiscount() +
             ", units=" + getUnits() +
             ", productId=" + getProductId() +
-            ", order=" + getOrder() +
             "}";
     }
 }
