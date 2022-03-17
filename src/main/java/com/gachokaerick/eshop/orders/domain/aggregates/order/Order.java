@@ -43,9 +43,8 @@ public class Order implements Serializable {
     private String description;
 
     @JsonIgnoreProperties(value = { "buyer" }, allowSetters = true)
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     @NotNull
-    @JoinColumn(unique = true)
     private Address address;
 
     @OneToMany(mappedBy = "order")

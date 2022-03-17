@@ -20,4 +20,22 @@
                                  referencedColumnNames="id"
                                  referencedTableName="buyer"/>
     </changeSet>
+
+    <changeSet id="20220317060642-1" author="jhipster">
+
+        <addColumn tableName="jhi_order">
+            <column name="address_id_2" type="bigint"/>
+        </addColumn>
+
+        <update tableName="jhi_order">
+            <column name="address_id_2" type="bigint" valueComputed="address_id"/>
+        </update>
+
+        <addNotNullConstraint tableName="jhi_order" columnName="address_id_2" />
+
+        <dropColumn columnName="address_id" tableName="jhi_order"/>
+
+        <renameColumn tableName="jhi_order" oldColumnName="address_id_2" newColumnName="address_id"/>
+
+    </changeSet>
 </databaseChangeLog>
