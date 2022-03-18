@@ -39,6 +39,8 @@ public class OrderDTO implements Serializable {
 
     private List<PaymentDTO> payments = new ArrayList<>();
 
+    private List<AuthorizationDTO> authorizations = new ArrayList<>();
+
     public OrderDTO() {}
 
     public OrderDTO(Long id, ZonedDateTime orderDate, OrderStatus orderStatus) {
@@ -164,6 +166,14 @@ public class OrderDTO implements Serializable {
 
     public void setPayments(List<PaymentDTO> payments) {
         this.payments = payments;
+    }
+
+    public List<AuthorizationDTO> getAuthorizations() {
+        return authorizations;
+    }
+
+    public void setAuthorizations(List<AuthorizationDTO> authorizations) {
+        this.authorizations = authorizations;
     }
 
     @Override
