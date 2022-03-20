@@ -35,6 +35,28 @@ public class AuthorizationDTO implements Serializable {
 
     private OrderDTO order;
 
+    public AuthorizationDTO() {}
+
+    public AuthorizationDTO(
+        Long id,
+        String status,
+        String authId,
+        String currencyCode,
+        BigDecimal amount,
+        ZonedDateTime expirationTime,
+        PaymentProvider paymentProvider,
+        OrderDTO order
+    ) {
+        this.id = id;
+        this.status = status;
+        this.authId = authId;
+        this.currencyCode = currencyCode;
+        this.amount = amount;
+        this.expirationTime = expirationTime;
+        this.paymentProvider = paymentProvider;
+        this.order = order;
+    }
+
     public Long getId() {
         return id;
     }

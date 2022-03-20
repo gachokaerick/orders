@@ -1,6 +1,7 @@
 package com.gachokaerick.eshop.orders.service.mapper;
 
 import com.gachokaerick.eshop.orders.domain.aggregates.order.Authorization;
+import com.gachokaerick.eshop.orders.domain.aggregates.order.OrderMapper;
 import com.gachokaerick.eshop.orders.service.dto.AuthorizationDTO;
 import org.mapstruct.*;
 
